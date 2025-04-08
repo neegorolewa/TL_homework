@@ -12,10 +12,11 @@
         string deliveryAddress = GetStringValue();
 
         bool isCorrectOrder = IsCorrectOrder( productName, quantityProduct, userName, deliveryAddress );
-        OutMessage( isCorrectOrder, productName, quantityProduct, userName, deliveryAddress );
+        WriteOutMessage( isCorrectOrder, productName, quantityProduct, userName, deliveryAddress );
     }
 
-    static void OutMessage( bool isCorrectOrder, string product, int quantity, string user, string address )
+    //переименовал функцию 
+    static void WriteOutMessage( bool isCorrectOrder, string product, int quantity, string user, string address )
     {
         if ( isCorrectOrder )
         {
@@ -37,28 +38,32 @@
 
             if ( string.IsNullOrEmpty( input ) )
             {
-                Console.Write( "Введите значение ['y' - да, 'n' - нет" );
+                Console.WriteLine( "Введите значение ['y' - да, 'n' - нет]. " );
                 continue;
             }
 
+            //добавил обработку на введную команду отличную от ['y', 'n']
             if ( input == "n" )
             {
                 return false;
             }
-            else
+            else if ( input == "y" )
             {
                 return true;
             }
+            else
+            {
+                Console.WriteLine( "Неверно введенная команда. Введите значение ['y' - да, 'n' - нет]." );
+                continue;
+            }
         }
     }
-
     static int GetQuantityValue()
     {
-        string input;
-
         while ( true )
         {
-            input = Console.ReadLine();
+            //переместил инициализацию внутрь while
+            string input = Console.ReadLine();
 
             if ( string.IsNullOrEmpty( input ) )
             {
@@ -84,17 +89,17 @@
 
     static string GetStringValue()
     {
-        string value;
-
         while ( true )
         {
-            value = Console.ReadLine();
-            if ( !string.IsNullOrEmpty( value ) )
-                break;
+            string value = Console.ReadLine();
 
-            Console.Write( "Поле не может быть пустым. Пожалуйста введите значение: " );
+            if ( string.IsNullOrEmpty( value ) )
+            {
+                Console.Write( "Поле не может быть пустым. Пожалуйста введите значение: " );
+                continue;
+            }
+
+            return value;
         }
-
-        return value;
     }
 }
