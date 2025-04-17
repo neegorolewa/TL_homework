@@ -21,33 +21,41 @@ public class BookingService : IBookingService
         new User { Id = 5, Name = "Evan Wright" }
     ];
 
-    public Booking Book(int userId, string categoryName, DateTime startDate, DateTime endDate, Currency currency)
+    public Booking Book( int userId, string categoryName, DateTime startDate, DateTime endDate, Currency currency )
     {
-        if (endDate < startDate)
+        //check booking if start date earlier than now date, else throw ArgumentException
+        if ( startDate < DateTime.Now )
         {
-            throw new ArgumentException("End date cannot be earlier than start date");
+            throw new ArgumentException( "Start date can't be earlier than now date" );
         }
 
-        RoomCategory? selectedCategory = _categories.FirstOrDefault(c => c.Name == categoryName);
-        if (selectedCategory == null)
+        //Add check startDate = endDate
+        if ( endDate <= startDate )
         {
-            throw new ArgumentException("Category not found");
+            throw new ArgumentException( "End date cannot be earlier than start date and in the same date" );
         }
 
-        if (selectedCategory.AvailableRooms <= 0)
+        //add lower category name
+        RoomCategory? selectedCategory = _categories.FirstOrDefault( c => c.Name.ToLower() == categoryName.ToLower() );
+        if ( selectedCategory == null )
         {
-            throw new ArgumentException("No available rooms");
+            throw new ArgumentException( "Category not found" );
         }
 
-        User? user = _users.FirstOrDefault(u => u.Id == userId);
-        if (user == null)
+        if ( selectedCategory.AvailableRooms <= 0 )
         {
-            throw new ArgumentException("User not found");
+            throw new ArgumentException( "No available rooms" );
         }
 
-        int days = (endDate - startDate).Days;
-        decimal currencyRate = GetCurrencyRate(currency);
-        decimal totalCost = CalculateBookingCost(selectedCategory.BaseRate, days, userId, currencyRate);
+        User? user = _users.FirstOrDefault( u => u.Id == userId );
+        if ( user == null )
+        {
+            throw new ArgumentException( "User not found" );
+        }
+
+        int days = ( endDate - startDate ).Days;
+        decimal currencyRate = GetCurrencyRate( currency );
+        decimal totalCost = CalculateBookingCost( selectedCategory.BaseRate, days, userId, currencyRate );
 
         Booking? booking = new()
         {
@@ -60,87 +68,96 @@ public class BookingService : IBookingService
             Currency = currency
         };
 
-        _bookings.Add(booking);
+        _bookings.Add( booking );
         selectedCategory.AvailableRooms--;
 
         return booking;
     }
 
-    public void CancelBooking(Guid bookingId)
+    public void CancelBooking( Guid bookingId )
     {
-        Booking? booking = _bookings.FirstOrDefault(b => b.Id == bookingId);
-        if (booking == null)
+        Booking? booking = _bookings.FirstOrDefault( b => b.Id == bookingId );
+
+        if ( booking == null )
         {
-            throw new ArgumentException($"Booking with id: '{bookingId}' does not exist");
+            throw new ArgumentException( $"Booking with id: '{bookingId}' does not exist" );
         }
 
-        if (booking.StartDate <= DateTime.Now)
+        if ( booking.StartDate <= DateTime.Now )
         {
-            throw new ArgumentException("Start date cannot be earlier than now date");
+            throw new ArgumentException( "Start date cannot be earlier than now date" );
         }
 
-        Console.WriteLine($"Refund of {booking.Cost} {booking.Currency}");
-        _bookings.Remove(booking);
-        RoomCategory? category = _categories.FirstOrDefault(c => c.Name == booking.RoomCategory.Name);
-        category.AvailableRooms++;
+        Console.WriteLine( $"Refund of {booking.Cost} {booking.Currency}" );
+        _bookings.Remove( booking );
+        RoomCategory? category = _categories.FirstOrDefault( c => c.Name == booking.RoomCategory.Name );
+        //category can't be null
+        category!.AvailableRooms++;
     }
 
-    private static decimal CalculateDiscount(int userId)
+    private static decimal CalculateDiscount( int userId )
     {
         return 0.1m;
     }
 
-    public Booking? FindBookingById(Guid bookingId)
+    public Booking? FindBookingById( Guid bookingId )
     {
-        return _bookings.FirstOrDefault(b => b.Id == bookingId);
+        return _bookings.FirstOrDefault( b => b.Id == bookingId );
     }
 
-    public IEnumerable<Booking> SearchBookings(DateTime startDate, DateTime endDate, string categoryName)
+    public IEnumerable<Booking> SearchBookings( DateTime startDate, DateTime endDate, string categoryName )
     {
         IQueryable<Booking> query = _bookings.AsQueryable();
 
-        query = query.Where(b => b.StartDate >= startDate);
+        query = query.Where( b => b.StartDate >= startDate );
 
-        query = query.Where(b => b.EndDate < endDate);
+        //booking dates must be included in the filter search
+        query = query.Where( b => b.EndDate <= endDate );
 
-        if (!string.IsNullOrEmpty(categoryName))
+        if ( !string.IsNullOrEmpty( categoryName ) )
         {
-            query = query.Where(b => b.RoomCategory.Name == categoryName);
+            //add ToLower() to avoid users errors 
+            query = query.Where( b => b.RoomCategory.Name.ToLower() == categoryName.ToLower() );
         }
 
         return query.ToList();
     }
 
-    public decimal CalculateCancellationPenaltyAmount(Booking booking)
+    public decimal CalculateCancellationPenaltyAmount( Booking booking )
     {
-        if (booking.StartDate <= DateTime.Now)
+        if ( booking.StartDate <= DateTime.Now )
         {
-            throw new ArgumentException("Start date cannot be earlier than now date");
+            throw new ArgumentException( "Start date cannot be earlier than now date" );
         }
 
-        int daysBeforeArrival = (DateTime.Now - booking.StartDate).Days;
+        //error, must be start date - now date
+        int daysBeforeArrival = ( booking.StartDate - DateTime.Now ).Days;
 
-        return 5000.0m / daysBeforeArrival;
+        //fixed divide by 0
+        return daysBeforeArrival == 0
+            ? ( 5000.0m / GetCurrencyRate( booking.Currency ) )
+            : ( 5000.0m ) / ( daysBeforeArrival * GetCurrencyRate( booking.Currency ) );
     }
 
-    private static decimal GetCurrencyRate(Currency currency)
+    private static decimal GetCurrencyRate( Currency currency )
     {
-        decimal currencyRate = 1m;
-        currencyRate *= currency switch
+        //currencyRate = 1m - it's useless
+        decimal currencyRate = currency switch
         {
-            Currency.Usd => (decimal)(new Random().NextDouble() * 100) + 1,
-            Currency.Cny => (decimal)(new Random().NextDouble() * 12) + 1,
+            Currency.Usd => ( decimal )( new Random().NextDouble() * 100 ) + 1,
+            Currency.Cny => ( decimal )( new Random().NextDouble() * 12 ) + 1,
             Currency.Rub => 1m,
-            _ => throw new ArgumentOutOfRangeException(nameof(currency), currency, null)
+            _ => throw new ArgumentOutOfRangeException( nameof( currency ), currency, null )
         };
 
         return currencyRate;
     }
 
-    private static decimal CalculateBookingCost(decimal baseRate, int days, int userId, decimal currencyRate)
+    private static decimal CalculateBookingCost( decimal baseRate, int days, int userId, decimal currencyRate )
     {
-        decimal cost = baseRate * days;
-        decimal totalCost = cost - cost * CalculateDiscount(userId) * currencyRate;
+        //fixed currency convertion
+        decimal cost = ( baseRate * days ) / currencyRate;
+        decimal totalCost = cost - cost * CalculateDiscount( userId );
         return totalCost;
     }
 }
