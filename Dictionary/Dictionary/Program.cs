@@ -1,4 +1,4 @@
-﻿namespace Dictionary;
+﻿namespace MyDictionary;
 
 public class Program
 {
@@ -6,23 +6,28 @@ public class Program
     const string AddTranslationCommand = "2";
     const string ClearScreenCommand = "3";
     const string ExitCommand = "4";
+    const string DictFilePath = "C:\\Users\\Eugene\\TL_practice\\Dictionary\\Dictionary\\dict.txt";
 
-    private static void Main( string[] args )
+    public static void Main( string[] args )
     {
-        Dictionary dictionary = new Dictionary();
+        MyDictionary dictionary = new MyDictionary( DictFilePath );
         RunProgramm( dictionary );
     }
 
-    public static void PrintMenu()
+    private static void PrintMenu()
     {
-        Console.WriteLine( "Выберите действие: \n" +
-           $"({GetTranslationCommand}) Перевести слово\n" +
-           $"({AddTranslationCommand}) Добавить перевод\n" +
-           $"({ClearScreenCommand}) Убрать лишнее с экрана\n" +
-           $"({ExitCommand}) Выйти" );
+        Console.WriteLine(
+                $"""
+                Выберите действие:
+               ({GetTranslationCommand}) Перевести слово
+               ({AddTranslationCommand}) Добавить перевод
+               ({ClearScreenCommand}) Убрать лишнее с экрана
+               ({ExitCommand}) Выйти
+               """
+           );
     }
 
-    public static void RunProgramm( Dictionary dict )
+    private static void RunProgramm( MyDictionary dict )
     {
         while ( true )
         {
@@ -57,7 +62,7 @@ public class Program
         }
     }
 
-    public static void GetTranslationFromDictionary( Dictionary dict )
+    private static void GetTranslationFromDictionary( MyDictionary dict )
     {
         Console.Write( "Введите слово для перевода: " );
         string inputWord = GetStringValue();
@@ -91,7 +96,7 @@ public class Program
         }
     }
 
-    public static void AddTranslationToDictionary( Dictionary dict, string? word = null )
+    private static void AddTranslationToDictionary( MyDictionary dict, string? word = null )
     {
         if ( word == null )
         {
@@ -102,11 +107,9 @@ public class Program
         Console.Write( $"Введите перевод для '{word}': " );
         string inputTranslate = GetStringValue();
         dict.AddTranslation( word, inputTranslate );
-
-        return;
     }
 
-    public static string GetStringValue()
+    private static string GetStringValue()
     {
         while ( true )
         {

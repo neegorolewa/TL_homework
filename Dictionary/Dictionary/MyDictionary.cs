@@ -1,14 +1,15 @@
-﻿namespace Dictionary;
+﻿namespace MyDictionary;
 
-public class Dictionary
+public class MyDictionary
 {
-    private const string DictFilePath = "C:\\Users\\Eugene\\TL_practice\\Dictionary\\Dictionary\\dict.txt";
     private const char TranslateSeparator = ':';
-    private const string TranslationNotFound = "";
+    private static readonly string TranslationNotFound = string.Empty;
 
     private readonly Dictionary<string, string> _dictionary;
-    public Dictionary()
+    private readonly string DictFilePath;
+    public MyDictionary( string filePath )
     {
+        DictFilePath = filePath;
         _dictionary = new Dictionary<string, string>();
 
         LoadDictionaryFromFile();
@@ -32,7 +33,7 @@ public class Dictionary
                 continue;
 
             string word = parts[ 0 ].Trim();
-            string translate = parts[ 1 ];
+            string translate = parts[ 1 ].Trim();
 
             _dictionary.Add( word, translate );
         }
@@ -68,9 +69,10 @@ public class Dictionary
 
         StreamWriter file = new StreamWriter( DictFilePath );
 
-        foreach ( var pair in _dictionary )
+        foreach ( KeyValuePair<string, string> pair in _dictionary )
         {
-            file.WriteLine( $"{pair.Key}{TranslateSeparator}{pair.Value}" );
+            (string key, string value) = pair;
+            file.WriteLine( $"{key}{TranslateSeparator}{value}" );
         }
 
         file.Close();
