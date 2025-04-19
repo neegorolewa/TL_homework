@@ -33,7 +33,7 @@ public static class AccommodationsProcessor
             {
                 Console.WriteLine( $"Error: {ex.Message}" );
             }
-            catch ( Exception ex ) //add more catch
+            catch ( InvalidOperationException ex ) //add more catch
             {
                 Console.WriteLine( $"Error: {ex.Message}" );
             }
@@ -123,7 +123,7 @@ public static class AccommodationsProcessor
                 //throw Exception if history is empty
                 if ( _executedCommands.Count == 0 )
                 {
-                    throw new Exception( "History of booking is empty" );
+                    throw new InvalidOperationException( "History of booking is empty" );
                 }
                 _executedCommands[ _commandIndex ].Undo();
                 _executedCommands.Remove( _commandIndex );

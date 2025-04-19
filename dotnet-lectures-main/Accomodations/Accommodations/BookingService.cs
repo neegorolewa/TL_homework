@@ -57,7 +57,8 @@ public class BookingService : IBookingService
         decimal currencyRate = GetCurrencyRate( currency );
         decimal totalCost = CalculateBookingCost( selectedCategory.BaseRate, days, userId, currencyRate );
 
-        Booking? booking = new()
+        //delete null
+        Booking booking = new()
         {
             Id = Guid.NewGuid(),
             UserId = userId,
@@ -90,9 +91,9 @@ public class BookingService : IBookingService
 
         Console.WriteLine( $"Refund of {booking.Cost} {booking.Currency}" );
         _bookings.Remove( booking );
-        RoomCategory? category = _categories.FirstOrDefault( c => c.Name == booking.RoomCategory.Name );
-        //category can't be null
-        category!.AvailableRooms++;
+        //changed FirstOrDefault -> First
+        RoomCategory? category = _categories.First( c => c.Name == booking.RoomCategory.Name );
+        category.AvailableRooms++;
     }
 
     private static decimal CalculateDiscount( int userId )
@@ -134,9 +135,11 @@ public class BookingService : IBookingService
         int daysBeforeArrival = ( booking.StartDate - DateTime.Now ).Days;
 
         //fixed divide by 0
+        decimal currencyRate = GetCurrencyRate( booking.Currency );
+
         return daysBeforeArrival == 0
-            ? ( 5000.0m / GetCurrencyRate( booking.Currency ) )
-            : ( 5000.0m ) / ( daysBeforeArrival * GetCurrencyRate( booking.Currency ) );
+            ? ( 5000.0m / currencyRate )
+            : ( 5000.0m ) / ( daysBeforeArrival * currencyRate );
     }
 
     private static decimal GetCurrencyRate( Currency currency )
@@ -157,7 +160,8 @@ public class BookingService : IBookingService
     {
         //fixed currency convertion
         decimal cost = ( baseRate * days ) / currencyRate;
-        decimal totalCost = cost - cost * CalculateDiscount( userId );
+        decimal discount = CalculateDiscount( userId );
+        decimal totalCost = cost * ( 1 - discount );
         return totalCost;
     }
 }
