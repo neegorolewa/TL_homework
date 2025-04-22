@@ -91,8 +91,8 @@ public class BookingService : IBookingService
 
         Console.WriteLine( $"Refund of {booking.Cost} {booking.Currency}" );
         _bookings.Remove( booking );
-        //changed FirstOrDefault -> First
-        RoomCategory? category = _categories.First( c => c.Name == booking.RoomCategory.Name );
+        //changed FirstOrDefault -> First, remove ? in RoomCategory?
+        RoomCategory category = _categories.First( c => c.Name == booking.RoomCategory.Name );
         category.AvailableRooms++;
     }
 

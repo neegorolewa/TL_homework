@@ -29,11 +29,7 @@ public static class AccommodationsProcessor
             {
                 ProcessCommand( input );
             }
-            catch ( ArgumentException ex )
-            {
-                Console.WriteLine( $"Error: {ex.Message}" );
-            }
-            catch ( InvalidOperationException ex ) //add more catch
+            catch ( SystemException ex )
             {
                 Console.WriteLine( $"Error: {ex.Message}" );
             }
