@@ -4,9 +4,9 @@ public class MyDictionary
 {
     private const char TranslateSeparator = ':';
     private static readonly string TranslationNotFound = string.Empty;
-
     private readonly Dictionary<string, string> _dictionary;
     private readonly string DictFilePath;
+
     public MyDictionary( string filePath )
     {
         DictFilePath = filePath;
@@ -69,12 +69,10 @@ public class MyDictionary
 
         StreamWriter file = new StreamWriter( DictFilePath );
 
-        foreach ( KeyValuePair<string, string> pair in _dictionary )
+        foreach ( (string key, string value) in _dictionary )
         {
-            (string key, string value) = pair;
             file.WriteLine( $"{key}{TranslateSeparator}{value}" );
         }
-
         file.Close();
     }
 }
