@@ -29,7 +29,7 @@ public static class AccommodationsProcessor
             {
                 ProcessCommand( input );
             }
-            catch ( SystemException ex )
+            catch ( Exception ex )
             {
                 Console.WriteLine( $"Error: {ex.Message}" );
             }
