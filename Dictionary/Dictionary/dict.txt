@@ -1,0 +1,6 @@
+cat:кот
+кошка:cat
+tree:дерево
+дом:house
+mouse:мышь
+theatre:театр
