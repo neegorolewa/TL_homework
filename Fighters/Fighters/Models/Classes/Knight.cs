@@ -2,7 +2,7 @@
 
 public class Knight : IClass
 {
-    public int Health { get; } = 30;
+    public int Health => 30;
 
-    public int Damage { get; } = 50;
+    public int Damage => 50;
 }

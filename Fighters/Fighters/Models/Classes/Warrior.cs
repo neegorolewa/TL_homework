@@ -2,7 +2,7 @@
 
 public class Warrior : IClass
 {
-    public int Health { get; } = 10;
+    public int Health => 10;
 
-    public int Damage { get; } = 30;
+    public int Damage => 30;
 }

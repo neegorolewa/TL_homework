@@ -1,5 +1,4 @@
-﻿using System;
-using Fighters.Models.Fighters;
+﻿using Fighters.Models.Fighters;
 
 namespace Fighters;
 
@@ -9,55 +8,65 @@ public class GameProcessor
     private const string Play = "play";
     private const string Exit = "exit";
 
-    private static List<IFighter> _fighters = new List<IFighter>();
+    private readonly List<IFighter> _fighters = new();
 
-    public static void RunGame()
+    public void RunGame()
     {
         PrintMenu();
 
-        string? input;
-        while ( ( input = Console.ReadLine().ToLower() ) != Exit )
+        while ( true )
         {
             try
             {
-                ProcessCommands( input );
+                ProcessCommands();
             }
-            catch ( SystemException ex )
+            catch ( Exception ex )
             {
                 Console.WriteLine( ex.Message );
             }
         }
     }
 
-    private static void ProcessCommands( string input )
+    private void ProcessCommands()
     {
-        if ( string.IsNullOrEmpty( input ) || input != AddFighter && input != Play )
+        string? input = Console.ReadLine()?.ToLower();
+        switch ( input )
         {
-            throw new ArgumentException( "Неизвестная команда" );
-        }
+            case AddFighter:
+                IFighter fighter = FightersCreator.CreateFighter();
+                _fighters.Add( fighter );
+                break;
 
-        if ( input == AddFighter )
-        {
-            IFighter fighter = FightersCreator.CreateFighter();
-            _fighters.Add( fighter );
-        }
+            case Play:
+                PlayGame();
+                _fighters.Clear();
+                break;
 
-        if ( input == Play )
-        {
-            if ( _fighters.Count < 2 )
-            {
-                throw new IndexOutOfRangeException( "Количество бойцов должно быть не менее 2-х" );
-            }
+            case Exit:
+                Environment.Exit( 0 );
+                break;
 
-            GameManager manager = new GameManager();
-            IFighter winner = manager.PlayAndGetWinner( _fighters );
-
-            Console.WriteLine( $"{winner.Name} всех уничтожил" );
-
+            default:
+                throw new InvalidOperationException( "Неизвестная команда" );
         }
     }
 
-    private static void PrintMenu()
+    private void PlayGame()
+    {
+        if ( _fighters.Count < 2 )
+        {
+            throw new IndexOutOfRangeException( "Количество бойцов должно быть не менее 2-х" );
+        }
+
+        List<IFighter> fightersForGame = new( _fighters );
+
+        GameManager manager = new();
+        IFighter winner = manager.PlayAndGetWinner( fightersForGame );
+
+        Console.WriteLine( $"{winner.Name} всех уничтожил" );
+    }
+
+    private void PrintMenu()
     {
         Console.WriteLine(
             $"""           

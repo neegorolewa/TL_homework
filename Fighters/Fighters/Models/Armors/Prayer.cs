@@ -2,5 +2,5 @@
 
 public class Prayer : IArmor
 {
-    public int Armor { get; } = 200;
+    public int Armor => 200;
 }

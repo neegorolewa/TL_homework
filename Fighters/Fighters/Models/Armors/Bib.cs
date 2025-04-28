@@ -2,5 +2,5 @@
 
 public class Bib : IArmor
 {
-    public int Armor { get; } = 100;
+    public int Armor => 100;
 }

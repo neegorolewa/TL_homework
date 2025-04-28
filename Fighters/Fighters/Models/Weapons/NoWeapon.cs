@@ -2,5 +2,5 @@
 
 public class NoWeapon : IWeapon
 {
-    public int Damage { get; } = 0;
+    public int Damage => 0;
 }

@@ -7,9 +7,6 @@ namespace Fighters.Models.Fighters;
 
 public class Fighter : IFighter
 {
-    private const int NoDamage = 0;
-    private const int NoArmor = 0;
-    private const int MinHealth = 0;
     private const int Multiplier = 2;
 
     public string Name { get; }
@@ -43,7 +40,7 @@ public class Fighter : IFighter
 
     public int CalculateDamage()
     {
-        Random random = new Random();
+        Random random = new();
 
         double damageFactor = random.Next( 80, 121 ) / 100;
         double currentDamage = Damage * damageFactor;
@@ -59,12 +56,12 @@ public class Fighter : IFighter
 
     public void TakeDamage( int damage )
     {
-        int recivedDamage = Math.Max( damage - CurrentArmor, NoDamage );
+        int recivedDamage = Math.Max( damage - CurrentArmor, 0 );
         int remainingHealth = CurrentHealth - recivedDamage;
         int lossArmor = damage / 3;
         int remainingArmor = CurrentArmor - lossArmor;
 
-        CurrentHealth = Math.Max( remainingHealth, MinHealth );
-        CurrentArmor = Math.Max( remainingArmor, NoArmor );
+        CurrentHealth = Math.Max( remainingHealth, 0 );
+        CurrentArmor = Math.Max( remainingArmor, 0 );
     }
 }

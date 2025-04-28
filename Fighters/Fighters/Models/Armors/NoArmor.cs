@@ -2,5 +2,5 @@
 
 public class NoArmor : IArmor
 {
-    public int Armor { get; } = 0;
+    public int Armor => 0;
 }

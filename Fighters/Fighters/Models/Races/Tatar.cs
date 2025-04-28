@@ -2,8 +2,8 @@
 
 public class Tatar : IRace
 {
-    public int Damage { get; } = 40;
-    public int Health { get; } = 200;
-    public int Armor { get; } = 40;
-    public int Power { get; } = 100;
+    public int Damage => 40;
+    public int Health => 200;
+    public int Armor => 40;
+    public int Power => 100;
 }

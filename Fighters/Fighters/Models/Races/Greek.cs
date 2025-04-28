@@ -2,8 +2,8 @@
 
 public class Greek : IRace
 {
-    public int Damage { get; } = 35;
-    public int Health { get; } = 180;
-    public int Armor { get; } = 60;
-    public int Power { get; } = 50;
+    public int Damage => 35;
+    public int Health => 180;
+    public int Armor => 60;
+    public int Power => 50;
 }

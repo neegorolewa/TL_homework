@@ -2,8 +2,8 @@
 
 public class Mongol : IRace
 {
-    public int Damage { get; } = 30;
-    public int Health { get; } = 150;
-    public int Armor { get; } = 20;
-    public int Power { get; } = 70;
+    public int Damage => 30;
+    public int Health => 150;
+    public int Armor => 20;
+    public int Power => 70;
 }

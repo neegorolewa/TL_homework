@@ -4,6 +4,8 @@ public class Program
 {
     private static void Main( string[] args )
     {
-        GameProcessor.RunGame();
+        GameProcessor processor = new();
+
+        processor.RunGame();
     }
 }

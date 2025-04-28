@@ -2,5 +2,5 @@
 
 public class Magic : IWeapon
 {
-    public int Damage { get; } = 200;
+    public int Damage => 200;
 }

@@ -2,5 +2,5 @@
 
 public class Helmet : IArmor
 {
-    public int Armor { get; } = 50;
+    public int Armor => 50;
 }

@@ -2,6 +2,6 @@
 
 public class Archer : IClass
 {
-    public int Health { get; } = 15;
-    public int Damage { get; } = 40;
+    public int Health => 15;
+    public int Damage => 40;
 }

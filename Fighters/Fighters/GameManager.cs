@@ -4,7 +4,7 @@ namespace Fighters;
 
 public class GameManager
 {
-    private const int Dead = 0;
+    private const int DeadFighterHealth = 0;
 
     public IFighter PlayAndGetWinner( List<IFighter> fighters )
     {
@@ -56,6 +56,6 @@ public class GameManager
             """
             );
 
-        return opponent.CurrentHealth == Dead;
+        return opponent.CurrentHealth == DeadFighterHealth;
     }
 }
