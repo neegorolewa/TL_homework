@@ -5,9 +5,8 @@ internal class Program
 {
     private static void Main( string[] args )
     {
-        CarCreator creator = new();
 
-        Car car = creator.CreateCar();
+        Car car = FactoryCar.CreateCar();
 
         string carInfo = car.ToString();
 

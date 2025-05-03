@@ -17,8 +17,8 @@ public class Car
     public IEngine Engine { get; private set; }
     public IPosition SteeringPosition { get; private set; }
     public ITransmission Transmission { get; private set; }
-    public int Speed => Engine.MaxSpeed;
-    public int Gear => Transmission.CountGear;
+    public int Speed { get; private set; }
+    public int Gear { get; private set; }
 
     public Car( IBrand brand, IModel model, IBody body, IColor color, IEngine engine, IPosition steeringPosition, ITransmission transmission )
     {
@@ -29,6 +29,8 @@ public class Car
         Engine = engine;
         SteeringPosition = steeringPosition;
         Transmission = transmission;
+        Speed = Engine.MaxSpeed;
+        Gear = Transmission.CountGear;
     }
 
     public override string ToString()
