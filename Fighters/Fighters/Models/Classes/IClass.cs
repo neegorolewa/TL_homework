@@ -2,6 +2,6 @@
 
 public interface IClass
 {
-    int Health { get; }
-    int Damage { get; }
+    public int Health { get; }
+    public int Damage { get; }
 }

@@ -2,49 +2,48 @@
 
 namespace Fighters;
 
-public class GameManager
+public static class GameManager
 {
     private const int DeadFighterHealth = 0;
 
-    public IFighter PlayAndGetWinner( List<IFighter> fighters )
+    public static IFighter PlayAndGetWinner( List<IFighter> fighters )
     {
         List<IFighter> aliveFighters = fighters.OrderByDescending(
-            f => f.Power
+            f => f.Initiative
         ).ToList();
 
-        int countFighters = aliveFighters.Count();
         int round = 0;
 
-        while ( true )
+        while ( aliveFighters.Count() > 1 )
         {
-            for ( int i = 0; i < aliveFighters.Count; i++ )
+            for ( int i = 0; i < aliveFighters.Count(); i++ )
             {
                 Console.WriteLine( $"Раунд {round++}" );
                 Console.WriteLine( $"Осталось бойцов: {aliveFighters.Count}" );
 
                 int attackerNumber = i;
-                int defenderNumber = ( i + 1 ) % countFighters;
+                int defenderNumber = ( i + 1 ) % aliveFighters.Count();
 
                 IFighter attacker = aliveFighters[ attackerNumber ];
                 IFighter defender = aliveFighters[ defenderNumber ];
 
                 Console.WriteLine( $"Бой {attacker.Name} vs {defender.Name}" );
+
                 if ( FightAndCheckIfOpponentDead( attacker, defender ) )
                 {
                     Console.WriteLine( $"Боец {defender.Name} убит!" );
                     aliveFighters.Remove( defender );
-                    countFighters--;
-                    if ( aliveFighters.Count == 1 )
-                    {
-                        return attacker;
-                    }
+
+                    break;
                 }
                 Console.WriteLine();
             }
         }
+
+        return aliveFighters[ 0 ];
     }
 
-    private bool FightAndCheckIfOpponentDead( IFighter roundOwner, IFighter opponent )
+    private static bool FightAndCheckIfOpponentDead( IFighter roundOwner, IFighter opponent )
     {
         int damage = roundOwner.CalculateDamage();
         opponent.TakeDamage( damage );

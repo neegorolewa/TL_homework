@@ -4,7 +4,7 @@ public class Program
 {
     private static void Main( string[] args )
     {
-        GameProcessor processor = new();
+        GameController processor = new();
 
         processor.RunGame();
     }

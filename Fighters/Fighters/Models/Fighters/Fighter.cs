@@ -10,8 +10,6 @@ public class Fighter : IFighter
     private const int Multiplier = 2;
 
     public string Name { get; }
-
-    public int MaxHealth => Race.Health + Class.Health;
     public int CurrentHealth { get; private set; }
     public int CurrentArmor { get; private set; }
 
@@ -23,9 +21,10 @@ public class Fighter : IFighter
 
     public IClass Class { get; }
 
-    public int Damage => Race.Damage + Weapon.Damage + Class.Damage;
-    public int MaxArmor => Race.Armor + Armor.Armor;
-    public int Power => Race.Power;
+    public int MaxHealth { get; private set; }
+    public int Damage { get; private set; }
+    public int MaxArmor { get; private set; }
+    public int Initiative { get; private set; }
 
     public Fighter( string name, IRace race, IClass classFighter, IArmor armor, IWeapon weapon )
     {
@@ -34,6 +33,10 @@ public class Fighter : IFighter
         Class = classFighter;
         Armor = armor;
         Weapon = weapon;
+        MaxHealth = Race.Health + Class.Health;
+        Damage = Race.Damage + Weapon.Damage + Class.Damage;
+        MaxArmor = Race.Armor + Armor.Armor;
+        Initiative = Race.Initiative;
         CurrentHealth = MaxHealth;
         CurrentArmor = MaxArmor;
     }

@@ -2,7 +2,7 @@
 
 namespace Fighters;
 
-public class GameProcessor
+public class GameController
 {
     private const string AddFighter = "add-fighter";
     private const string Play = "play";
@@ -33,7 +33,7 @@ public class GameProcessor
         switch ( input )
         {
             case AddFighter:
-                IFighter fighter = FightersCreator.CreateFighter();
+                IFighter fighter = FightersFactory.CreateFighter();
                 _fighters.Add( fighter );
                 break;
 
@@ -60,8 +60,7 @@ public class GameProcessor
 
         List<IFighter> fightersForGame = new( _fighters );
 
-        GameManager manager = new();
-        IFighter winner = manager.PlayAndGetWinner( fightersForGame );
+        IFighter winner = GameManager.PlayAndGetWinner( fightersForGame );
 
         Console.WriteLine( $"{winner.Name} всех уничтожил" );
     }

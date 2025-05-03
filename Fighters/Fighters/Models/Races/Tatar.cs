@@ -5,5 +5,5 @@ public class Tatar : IRace
     public int Damage => 40;
     public int Health => 200;
     public int Armor => 40;
-    public int Power => 100;
+    public int Initiative => 100;
 }

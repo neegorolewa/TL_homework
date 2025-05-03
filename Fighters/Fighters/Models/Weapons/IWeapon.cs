@@ -2,5 +2,5 @@
 
 public interface IWeapon
 {
-    int Damage { get; }
+    public int Damage { get; }
 }

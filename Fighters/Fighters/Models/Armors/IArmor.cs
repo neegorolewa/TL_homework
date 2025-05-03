@@ -2,5 +2,5 @@
 
 public interface IArmor
 {
-    int Armor { get; }
+    public int Armor { get; }
 }
