@@ -1,0 +1,57 @@
+﻿namespace Domain.Entities;
+
+public class RoomType
+{
+    public Guid Id { get; }
+    public Guid PropertyId { get; private set; }
+    public string Name { get; private set; }
+    public decimal DailyPrice { get; private set; }
+    public string Currency { get; private set; }
+    public int MinPersonCount { get; private set; }
+    public int MaxPersonCount { get; private set; }
+    public string Services { get; private set; }
+    public string Amenities { get; private set; }
+
+    public IReadOnlyList<Property> Properties { get; private set; } = new List<Property>();
+
+    public RoomType(
+        Guid propertyId,
+        string name,
+        decimal dailyPrice,
+        string currency,
+        int minPersonCount,
+        int maxPersonCount,
+        string services,
+        string amenities )
+    {
+        if ( !string.IsNullOrEmpty( name ) )
+        {
+            throw new ArgumentException( $"'{nameof( name )}' can't be null or empty" );
+        }
+
+        if ( !string.IsNullOrEmpty( currency ) )
+        {
+            throw new ArgumentException( $"'{nameof( currency )}' can't be null or empty" );
+        }
+
+        if ( !string.IsNullOrEmpty( services ) )
+        {
+            throw new ArgumentException( $"'{nameof( services )}' can't be null or empty" );
+        }
+
+        if ( !string.IsNullOrEmpty( amenities ) )
+        {
+            throw new ArgumentException( $"'{nameof( amenities )}' can't be null or empty" );
+        }
+
+        PropertyId = propertyId;
+        Name = name;
+        DailyPrice = dailyPrice;
+        Currency = currency;
+        MinPersonCount = minPersonCount;
+        MaxPersonCount = maxPersonCount;
+        Services = services;
+        Amenities = amenities;
+    }
+
+}
