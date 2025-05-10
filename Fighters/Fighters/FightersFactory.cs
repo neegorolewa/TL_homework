@@ -9,50 +9,54 @@ namespace Fighters;
 
 public class FightersFactory
 {
+    private static readonly Dictionary<string, IRace> RaceOptions = new()
+    {
+        [ "Русский" ] = new Russian(),
+        [ "Грек" ] = new Greek(),
+        [ "Монгол" ] = new Mongol(),
+        [ "Татарин" ] = new Tatar()
+    };
+
+    private static readonly Dictionary<string, IClass> ClassOptions = new()
+    {
+        [ "Лучник" ] = new Archer(),
+        [ "Рыцарь" ] = new Knight(),
+        [ "Воин" ] = new Warrior()
+    };
+
+    private static readonly Dictionary<string, IArmor> ArmorOptions = new()
+    {
+        [ "Без брони" ] = new NoArmor(),
+        [ "Нагрудник" ] = new Bib(),
+        [ "Шлем" ] = new Helmet(),
+        [ "Молитвенник" ] = new Prayer(),
+    };
+
+    private static readonly Dictionary<string, IWeapon> WeaponOptions = new()
+    {
+        [ "Без оружия" ] = new NoWeapon(),
+        [ "Пистолет" ] = new Gun(),
+        [ "Меч" ] = new Sword(),
+        [ "Камень" ] = new Stone(),
+        [ "Черная магия" ] = new Magic(),
+    };
+
     public static IFighter CreateFighter()
     {
         Console.Write( "Введите имя бойца: " );
         string name = GetStringValue();
 
         Console.WriteLine( "Выберите расу из списка ниже:" );
-        IRace selectedRace = SelectOption(
-            new Dictionary<string, IRace>
-            {
-                [ "Русский" ] = new Russian(),
-                [ "Грек" ] = new Greek(),
-                [ "Монгол" ] = new Mongol(),
-                [ "Татарин" ] = new Tatar()
-            } );
+        IRace selectedRace = SelectOption( RaceOptions );
 
         Console.WriteLine( "Выберите класс бойца из списка ниже:" );
-        IClass selectedClass = SelectOption(
-            new Dictionary<string, IClass>
-            {
-                [ "Лучник" ] = new Archer(),
-                [ "Рыцарь" ] = new Knight(),
-                [ "Воин" ] = new Warrior()
-            } );
+        IClass selectedClass = SelectOption( ClassOptions );
 
         Console.WriteLine( "Выберите броню из списка ниже:" );
-        IArmor selectedArmor = SelectOption(
-            new Dictionary<string, IArmor>
-            {
-                [ "Без брони" ] = new NoArmor(),
-                [ "Нагрудник" ] = new Bib(),
-                [ "Шлем" ] = new Helmet(),
-                [ "Молитвенник" ] = new Prayer(),
-            } );
+        IArmor selectedArmor = SelectOption( ArmorOptions );
 
         Console.WriteLine( "Выберите оружие из списка ниже:" );
-        IWeapon selectedWeapon = SelectOption(
-            new Dictionary<string, IWeapon>
-            {
-                [ "Без оружия" ] = new NoWeapon(),
-                [ "Пистолет" ] = new Gun(),
-                [ "Меч" ] = new Sword(),
-                [ "Камень" ] = new Stone(),
-                [ "Черная магия" ] = new Magic(),
-            } );
+        IWeapon selectedWeapon = SelectOption( WeaponOptions );
 
         IFighter newFighter = new Fighter( name, selectedRace, selectedClass, selectedArmor, selectedWeapon );
 
@@ -71,13 +75,20 @@ public class FightersFactory
     private static T SelectOption<T>( Dictionary<string, T> options )
     {
         int index = 0;
+        bool isValidOptions = false;
+        int indexSelectedOption = 0;
+
         foreach ( (string key, T value) in options )
         {
             Console.WriteLine( $"{index++} - {key}" );
         }
 
+        while ( !isValidOptions )
+        {
+            indexSelectedOption = GetIntValue();
+            isValidOptions = ValidateRange( indexSelectedOption, 0, options.Count - 1 );
+        }
 
-        int indexSelectedOption = ReadIntInRange( 0, options.Count - 1 );
         return options.Values.ElementAt( indexSelectedOption );
     }
 
@@ -97,17 +108,28 @@ public class FightersFactory
         }
     }
 
-    private static int ReadIntInRange( int minValue, int maxValue )
+    private static int GetIntValue()
     {
         while ( true )
         {
-            if ( !int.TryParse( Console.ReadLine(), out int value ) || ( value < minValue || value > maxValue ) )
+            if ( !int.TryParse( Console.ReadLine(), out int value ) )
             {
-                Console.WriteLine( $"Введите значение от {minValue} до {maxValue}" );
+                Console.WriteLine( $"Введите числовое значение" );
                 continue;
             }
 
             return value;
         }
+    }
+
+    private static bool ValidateRange( int value, int minValue, int maxValue )
+    {
+        if ( value < minValue || value > maxValue )
+        {
+            Console.WriteLine( $"Введите значени от {minValue} до {maxValue} " );
+            return false;
+        }
+
+        return true;
     }
 }
