@@ -1,0 +1,57 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: 1px solid darkblue;
+}
+
+.content {
+    background-color: aqua;
+    padding: 10px;
+    max-width: 600px;
+    border: 1px solid darkblue;
+}
+
+.main-form {
+    display: grid;
+    gap: 10px;
+}
+
+.main-form button{
+    cursor: pointer;
+    padding: 10px 0;
+    text-transform: uppercase;
+}
+
+.main-form button:hover{
+    background-color: rgb(219, 200, 147);
+}
+
+.result{
+    background-color: rgb(37, 25, 25);
+    color:white;
+    padding: 5px;
+    display: none;
+}
+
+.result.result__visible{
+    display: block;
+
+}
+
+@media (min-width: 400px) {
+    .main-form {
+        grid-template-columns: 100px 1fr;
+    }
+
+    .main-form button {
+        grid-column: 2 / 3;
+    }
+}
