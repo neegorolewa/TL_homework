@@ -1,4 +1,5 @@
-﻿using Fighters.Models.Armors;
+﻿using System.Linq;
+using Fighters.Models.Armors;
 using Fighters.Models.Classes;
 using Fighters.Models.Fighters;
 using Fighters.Models.Races;
@@ -13,44 +14,44 @@ public class FightersFactory
         Console.Write( "Введите имя бойца: " );
         string name = GetStringValue();
 
+        Console.WriteLine( "Выберите расу из списка ниже:" );
         IRace selectedRace = SelectOption(
-            "Выберите расу из списка ниже:",
-            new (string, IRace)[]
+            new Dictionary<string, IRace>
             {
-                ("Русский", new Russian()),
-                ("Грек", new Greek()),
-                ("Монгол", new Mongol()),
-                ("Татарин", new Tatar()),
+                [ "Русский" ] = new Russian(),
+                [ "Грек" ] = new Greek(),
+                [ "Монгол" ] = new Mongol(),
+                [ "Татарин" ] = new Tatar()
             } );
 
+        Console.WriteLine( "Выберите класс бойца из списка ниже:" );
         IClass selectedClass = SelectOption(
-            "Выберите класс бойца из списка ниже:",
-            new (string, IClass)[]
+            new Dictionary<string, IClass>
             {
-                ("Лучник", new Archer()),
-                ("Рыцарь", new Knight()),
-                ("Воин", new Warrior()),
+                [ "Лучник" ] = new Archer(),
+                [ "Рыцарь" ] = new Knight(),
+                [ "Воин" ] = new Warrior()
             } );
 
+        Console.WriteLine( "Выберите броню из списка ниже:" );
         IArmor selectedArmor = SelectOption(
-            "Выберите броню из списка ниже:",
-            new (string, IArmor)[]
+            new Dictionary<string, IArmor>
             {
-                ("Без брони", new NoArmor()),
-                ("Нагрудник", new Bib()),
-                ("Шлем", new Helmet()),
-                ("Молитвенник", new Prayer()),
+                [ "Без брони" ] = new NoArmor(),
+                [ "Нагрудник" ] = new Bib(),
+                [ "Шлем" ] = new Helmet(),
+                [ "Молитвенник" ] = new Prayer(),
             } );
 
+        Console.WriteLine( "Выберите оружие из списка ниже:" );
         IWeapon selectedWeapon = SelectOption(
-            "Выберите оружие из списка ниже:",
-            new (string, IWeapon)[]
+            new Dictionary<string, IWeapon>
             {
-                ("Без оружия", new NoWeapon()),
-                ("Пистолет", new Gun()),
-                ("Меч", new Sword()),
-                ("Камень", new Stone()),
-                ("Черная магия", new Magic()),
+                [ "Без оружия" ] = new NoWeapon(),
+                [ "Пистолет" ] = new Gun(),
+                [ "Меч" ] = new Sword(),
+                [ "Камень" ] = new Stone(),
+                [ "Черная магия" ] = new Magic(),
             } );
 
         IFighter newFighter = new Fighter( name, selectedRace, selectedClass, selectedArmor, selectedWeapon );
@@ -67,17 +68,17 @@ public class FightersFactory
         return newFighter;
     }
 
-    private static T SelectOption<T>( string outMessage, (string typeMessage, T typeValue)[] options )
+    private static T SelectOption<T>( Dictionary<string, T> options )
     {
-        Console.WriteLine( outMessage );
-
-        for ( int i = 0; i < options.Length; i++ )
+        int index = 0;
+        foreach ( (string key, T value) in options )
         {
-            Console.WriteLine( $"{i} - {options[ i ].typeMessage}" );
+            Console.WriteLine( $"{index++} - {key}" );
         }
 
-        int indexSelectedOption = GetIntValue( 0, options.Length - 1 );
-        return options[ indexSelectedOption ].typeValue;
+
+        int indexSelectedOption = GetIntValue( 0, options.Count - 1 );
+        return options.Values.ElementAt( indexSelectedOption );
     }
 
     private static string GetStringValue()
