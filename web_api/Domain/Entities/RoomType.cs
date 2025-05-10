@@ -12,7 +12,7 @@ public class RoomType
     public string Services { get; private set; }
     public string Amenities { get; private set; }
 
-    public IReadOnlyList<Property> Properties { get; private set; } = new List<Property>();
+    public IReadOnlyList<Property> Reservations { get; private set; } = new List<Property>();
 
     public RoomType(
         Guid propertyId,
@@ -24,24 +24,39 @@ public class RoomType
         string services,
         string amenities )
     {
-        if ( !string.IsNullOrEmpty( name ) )
+        if ( propertyId == Guid.Empty )
         {
-            throw new ArgumentException( $"'{nameof( name )}' can't be null or empty" );
+            throw new ArgumentException( $"'{nameof( propertyId )} can't be empty'", nameof( propertyId ) );
         }
 
-        if ( !string.IsNullOrEmpty( currency ) )
+        if ( string.IsNullOrEmpty( name ) )
         {
-            throw new ArgumentException( $"'{nameof( currency )}' can't be null or empty" );
+            throw new ArgumentException( $"'{nameof( name )}' can't be null or empty", nameof( name ) );
         }
 
-        if ( !string.IsNullOrEmpty( services ) )
+        if ( string.IsNullOrEmpty( currency ) )
         {
-            throw new ArgumentException( $"'{nameof( services )}' can't be null or empty" );
+            throw new ArgumentException( $"'{nameof( currency )}' can't be null or empty", nameof( currency ) );
         }
 
-        if ( !string.IsNullOrEmpty( amenities ) )
+        if ( string.IsNullOrEmpty( services ) )
         {
-            throw new ArgumentException( $"'{nameof( amenities )}' can't be null or empty" );
+            throw new ArgumentException( $"'{nameof( services )}' can't be null or empty", nameof( services ) );
+        }
+
+        if ( string.IsNullOrEmpty( amenities ) )
+        {
+            throw new ArgumentException( $"'{nameof( amenities )}' can't be null or empty", nameof( amenities ) );
+        }
+
+        if ( DailyPrice <= 0 )
+        {
+            throw new IndexOutOfRangeException( $"'{nameof( DailyPrice )} must be grater than 0'" );
+        }
+
+        if ( minPersonCount <= 0 || maxPersonCount <= 0 || maxPersonCount < minPersonCount )
+        {
+            throw new IndexOutOfRangeException( "Invalid person count range." );
         }
 
         PropertyId = propertyId;

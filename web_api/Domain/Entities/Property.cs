@@ -22,24 +22,24 @@ public class Property
         decimal latitude,
         decimal longitude )
     {
-        if ( !string.IsNullOrEmpty( name ) )
+        if ( string.IsNullOrEmpty( name ) )
         {
-            throw new ArgumentException( $"'{nameof( name )}' can't be null or empty" );
+            throw new ArgumentException( $"'{nameof( name )}' can't be null or empty", nameof( name ) );
         }
 
-        if ( !string.IsNullOrEmpty( country ) )
+        if ( string.IsNullOrEmpty( country ) )
         {
-            throw new ArgumentException( $"'{nameof( country )}' can't be null or empty" );
+            throw new ArgumentException( $"'{nameof( country )}' can't be null or empty", nameof( country ) );
         }
 
-        if ( !string.IsNullOrEmpty( city ) )
+        if ( string.IsNullOrEmpty( city ) )
         {
-            throw new ArgumentException( $"'{nameof( city )}' can't be null or empty" );
+            throw new ArgumentException( $"'{nameof( city )}' can't be null or empty", nameof( city ) );
         }
 
-        if ( !string.IsNullOrEmpty( address ) )
+        if ( string.IsNullOrEmpty( address ) )
         {
-            throw new ArgumentException( $"'{nameof( address )}' can't be null or empty" );
+            throw new ArgumentException( $"'{nameof( address )}' can't be null or empty", nameof( address ) );
         }
 
         Name = name;
