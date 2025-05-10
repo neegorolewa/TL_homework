@@ -42,6 +42,7 @@ public class Property
             throw new ArgumentException( $"'{nameof( address )}' can't be null or empty", nameof( address ) );
         }
 
+        Id = Guid.NewGuid();
         Name = name;
         Country = country;
         City = city;

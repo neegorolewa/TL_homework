@@ -1,0 +1,34 @@
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Infrastructure.Foundation.Database.EntityConfiguration;
+
+internal class RoomTypeConfiguration : IEntityTypeConfiguration<RoomType>
+{
+    public void Configure( EntityTypeBuilder<RoomType> builder )
+    {
+        builder.ToTable( nameof( RoomType ) )
+            .HasKey( rt => rt.Id );
+
+        builder.Property( rt => rt.Name )
+            .HasMaxLength( 100 )
+            .IsRequired();
+
+        builder.Property( rt => rt.DailyPrice )
+            .HasPrecision( 10, 3 )
+            .IsRequired();
+
+        builder.Property( rt => rt.Currency )
+            .HasMaxLength( 10 )
+            .IsRequired();
+
+        builder.Property( rt => rt.MinPersonCount )
+            .IsRequired();
+
+        builder.Property( rt => rt.MaxPersonCount )
+            .IsRequired();
+
+        //продолжить работу
+    }
+}

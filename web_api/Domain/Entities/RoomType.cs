@@ -12,7 +12,7 @@ public class RoomType
     public string Services { get; private set; }
     public string Amenities { get; private set; }
 
-    public IReadOnlyList<Property> Reservations { get; private set; } = new List<Property>();
+    public IReadOnlyList<Reservation> Reservations { get; private set; } = new List<Reservation>();
 
     public RoomType(
         Guid propertyId,
@@ -49,16 +49,17 @@ public class RoomType
             throw new ArgumentException( $"'{nameof( amenities )}' can't be null or empty", nameof( amenities ) );
         }
 
-        if ( DailyPrice <= 0 )
+        if ( dailyPrice <= 0 )
         {
-            throw new IndexOutOfRangeException( $"'{nameof( DailyPrice )} must be grater than 0'" );
+            throw new ArgumentOutOfRangeException( $"'{nameof( DailyPrice )} must be grater than 0'" );
         }
 
         if ( minPersonCount <= 0 || maxPersonCount <= 0 || maxPersonCount < minPersonCount )
         {
-            throw new IndexOutOfRangeException( "Invalid person count range." );
+            throw new ArgumentOutOfRangeException( "Invalid person count range." );
         }
 
+        Id = Guid.NewGuid();
         PropertyId = propertyId;
         Name = name;
         DailyPrice = dailyPrice;
