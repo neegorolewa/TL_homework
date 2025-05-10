@@ -77,7 +77,7 @@ public class FightersFactory
         }
 
 
-        int indexSelectedOption = GetIntValue( 0, options.Count - 1 );
+        int indexSelectedOption = ReadIntInRange( 0, options.Count - 1 );
         return options.Values.ElementAt( indexSelectedOption );
     }
 
@@ -97,7 +97,7 @@ public class FightersFactory
         }
     }
 
-    private static int GetIntValue( int minValue, int maxValue )
+    private static int ReadIntInRange( int minValue, int maxValue )
     {
         while ( true )
         {
