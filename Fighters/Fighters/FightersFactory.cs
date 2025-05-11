@@ -75,21 +75,20 @@ public class FightersFactory
     private static T SelectOption<T>( Dictionary<string, T> options )
     {
         int index = 0;
-        bool isValidOptions = false;
-        int indexSelectedOption = 0;
 
         foreach ( (string key, T value) in options )
         {
             Console.WriteLine( $"{index++} - {key}" );
         }
 
-        while ( !isValidOptions )
+        int selectedIndex;
+        do
         {
-            indexSelectedOption = GetIntValue();
-            isValidOptions = ValidateRange( indexSelectedOption, 0, options.Count - 1 );
+            selectedIndex = GetIntValue();
         }
+        while ( !IsInRange( selectedIndex, 0, options.Count - 1 ) );
 
-        return options.Values.ElementAt( indexSelectedOption );
+        return options.Values.ElementAt( selectedIndex );
     }
 
     private static string GetStringValue()
@@ -122,7 +121,7 @@ public class FightersFactory
         }
     }
 
-    private static bool ValidateRange( int value, int minValue, int maxValue )
+    private static bool IsInRange( int value, int minValue, int maxValue )
     {
         if ( value < minValue || value > maxValue )
         {
