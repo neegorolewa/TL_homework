@@ -16,7 +16,7 @@ internal class RoomTypeConfiguration : IEntityTypeConfiguration<RoomType>
             .IsRequired();
 
         builder.Property( rt => rt.DailyPrice )
-            .HasPrecision( 10, 3 )
+            .HasPrecision( 18, 2 )
             .IsRequired();
 
         builder.Property( rt => rt.Currency )
@@ -29,6 +29,16 @@ internal class RoomTypeConfiguration : IEntityTypeConfiguration<RoomType>
         builder.Property( rt => rt.MaxPersonCount )
             .IsRequired();
 
-        //продолжить работу
+        builder.Property( rt => rt.Services )
+            .HasMaxLength( 1000 )
+            .IsRequired();
+
+        builder.Property( rt => rt.Amenities )
+            .HasMaxLength( 1000 )
+            .IsRequired();
+
+        builder.HasMany( rt => rt.Reservations )
+            .WithOne()
+            .HasForeignKey( r => r.RoomTypeId );
     }
 }
