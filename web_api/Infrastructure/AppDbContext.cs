@@ -9,11 +9,16 @@ public class AppDbContext : DbContext
     public DbSet<Property> Properties { get; set; }
     public DbSet<RoomType> RoomTypes { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
+    /*public AppDbContext()
+        : base()
+    {
+    }*/
 
     public AppDbContext( DbContextOptions<AppDbContext> options )
         : base( options )
     {
     }
+
 
     protected override void OnModelCreating( ModelBuilder modelBuilder )
     {
@@ -21,6 +26,6 @@ public class AppDbContext : DbContext
 
         modelBuilder.ApplyConfiguration( new PropertyConfiguration() );
         modelBuilder.ApplyConfiguration( new RoomTypeConfiguration() );
-        modelBuilder.ApplyConfiguration( new ReservationCofiguration() );
+        modelBuilder.ApplyConfiguration( new ReservationConfiguration() );
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Foundation.Database.EntityConfiguration;
 
-internal class ReservationCofiguration : IEntityTypeConfiguration<Reservation>
+internal class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
 {
     public void Configure( EntityTypeBuilder<Reservation> builder )
     {
@@ -36,7 +36,7 @@ internal class ReservationCofiguration : IEntityTypeConfiguration<Reservation>
             .IsRequired();
 
         builder.Property( r => r.Currency )
-            .HasMaxLength( 3 )
+            .HasMaxLength( 5 )
             .IsRequired();
     }
 }

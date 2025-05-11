@@ -20,7 +20,7 @@ internal class RoomTypeConfiguration : IEntityTypeConfiguration<RoomType>
             .IsRequired();
 
         builder.Property( rt => rt.Currency )
-            .HasMaxLength( 10 )
+            .HasMaxLength( 5 )
             .IsRequired();
 
         builder.Property( rt => rt.MinPersonCount )
@@ -38,7 +38,8 @@ internal class RoomTypeConfiguration : IEntityTypeConfiguration<RoomType>
             .IsRequired();
 
         builder.HasMany( rt => rt.Reservations )
-            .WithOne()
-            .HasForeignKey( r => r.RoomTypeId );
+            .WithOne( r => r.RoomType )
+            .HasForeignKey( r => r.RoomTypeId )
+            .OnDelete( DeleteBehavior.Cascade );
     }
 }

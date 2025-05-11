@@ -36,11 +36,13 @@ internal class PropertyConfiguration : IEntityTypeConfiguration<Property>
             .IsRequired();
 
         builder.HasMany( p => p.RoomTypes )
-            .WithOne()
-            .HasForeignKey( rt => rt.PropertyId );
+            .WithOne( rt => rt.Property )
+            .HasForeignKey( rt => rt.PropertyId )
+            .OnDelete( DeleteBehavior.Restrict );
 
         builder.HasMany( p => p.Reservations )
-            .WithOne()
-            .HasForeignKey( r => r.PropertyId );
+            .WithOne( r => r.Property )
+            .HasForeignKey( r => r.PropertyId )
+            .OnDelete( DeleteBehavior.Restrict );
     }
 }

@@ -15,6 +15,12 @@ public class Reservation
     public string GuestPhoneNumber { get; private set; }
     public decimal Total { get; private set; }
     public string Currency { get; private set; }
+    public Property? Property { get; private set; }
+    public RoomType? RoomType { get; private set; }
+
+    protected Reservation()
+    {
+    }
 
     public Reservation(
         Guid propertyId,
@@ -25,7 +31,7 @@ public class Reservation
         TimeOnly departureTime,
         string guestName,
         string guestPhoneNumber,
-        decimal dailyPrice,
+        decimal total,
         string currency
         )
     {
@@ -59,11 +65,6 @@ public class Reservation
             throw new ArgumentException( $"'{nameof( currency )}' can't be null or empty", nameof( currency ) );
         }
 
-        if ( dailyPrice <= 0 )
-        {
-            throw new ArgumentOutOfRangeException( "Daily price must be positive" );
-        }
-
         Id = Guid.NewGuid();
         PropertyId = propertyId;
         RoomTypeId = roomTypeId;
@@ -73,16 +74,15 @@ public class Reservation
         DepartureTime = departureTime;
         GuestName = guestName;
         GuestPhoneNumber = guestPhoneNumber;
+        Total = total;
         Currency = currency;
-        Total = CalculateTotal( dailyPrice, arrivalDate, departureDate );
     }
 
-
-    private decimal CalculateTotal( decimal dailyPrice, DateOnly arrivalDate, DateOnly departureDate )
+    /*private void CalculateTotal( decimal dailyPrice, DateOnly arrivalDate, DateOnly departureDate )
     {
         int countNights = departureDate.DayNumber - arrivalDate.DayNumber;
         decimal total = dailyPrice * countNights;
 
-        return total;
-    }
+        Total = total;
+    }*/
 }

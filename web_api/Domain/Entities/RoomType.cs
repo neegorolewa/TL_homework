@@ -11,9 +11,13 @@ public class RoomType
     public int MaxPersonCount { get; private set; }
     public string Services { get; private set; }
     public string Amenities { get; private set; }
+    public Property? Property { get; private set; }
 
-    public IReadOnlyList<Reservation> Reservations { get; private set; } = new List<Reservation>();
+    public IReadOnlyList<Reservation> Reservations { get; private set; } = [];
 
+    protected RoomType()
+    {
+    }
     public RoomType(
         Guid propertyId,
         string name,
