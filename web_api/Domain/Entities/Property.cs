@@ -3,12 +3,12 @@
 public class Property
 {
     public Guid Id { get; }
-    public string Name { get; private set; }
-    public string Country { get; private set; }
-    public string City { get; private set; }
-    public string Address { get; private set; }
-    public decimal Latitude { get; private set; }
-    public decimal Longitude { get; private set; }
+    public string Name { get; set; }
+    public string Country { get; set; }
+    public string City { get; set; }
+    public string Address { get; set; }
+    public decimal Latitude { get; set; }
+    public decimal Longitude { get; set; }
 
     public IReadOnlyList<RoomType> RoomTypes { get; private set; } = [];
 
