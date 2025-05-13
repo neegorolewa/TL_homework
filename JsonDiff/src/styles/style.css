@@ -99,7 +99,7 @@ main {
 }
 
 .content {
-    background-color: aqua;
+    background-color: #fafad2   ;
     padding: 10px;
     max-width: 600px;
     border: 1px solid darkblue;
@@ -120,10 +120,16 @@ main {
     background-color: rgb(219, 200, 147);
 }
 
+.error-json {
+    color: #ff0000;
+    font-size: 14px;
+}
+
 .result {
     background-color: rgb(37, 25, 25);
-    color: white;
-    padding: 5px;
+    color: #fafad2;
+    padding: 10px;
+    margin: 20px;
     display: none;
 }
 
@@ -229,5 +235,10 @@ main {
 
     .main-form button {
         grid-column: 2 / 3;
+    }
+
+    .error-json {
+        grid-column: 2/3;
+
     }
 }

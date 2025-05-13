@@ -35,7 +35,7 @@ const create = async (oldObj, newObj) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve(result);
-        }, 5000);
+        }, 1000);
     });
 };
 
