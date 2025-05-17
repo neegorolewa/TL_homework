@@ -45,7 +45,7 @@ public class Fighter : IFighter
     {
         Random random = new();
 
-        double damageFactor = random.Next( 80, 121 ) / 100;
+        double damageFactor = random.Next( 80, 121 ) / ( double )100;
         double currentDamage = Damage * damageFactor;
 
         int criticalDamage = random.Next( 0, 101 );
