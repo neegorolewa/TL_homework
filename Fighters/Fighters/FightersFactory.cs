@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Fighters.Models.Armors;
+﻿using Fighters.Models.Armors;
 using Fighters.Models.Classes;
 using Fighters.Models.Fighters;
 using Fighters.Models.Races;
@@ -125,7 +124,7 @@ public class FightersFactory
     {
         if ( value < minValue || value > maxValue )
         {
-            Console.WriteLine( $"Введите значени от {minValue} до {maxValue} " );
+            Console.WriteLine( $"Введите значени от {minValue} до {maxValue}" );
             return false;
         }
 
