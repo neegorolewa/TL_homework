@@ -18,10 +18,10 @@ public class FighterTests
 
     public FighterTests()
     {
-        _raceMock = new Mock<IRace>();
-        _weaponMock = new Mock<IWeapon>();
-        _armorMock = new Mock<IArmor>();
-        _classMock = new Mock<IClass>();
+        _raceMock = new();
+        _weaponMock = new();
+        _armorMock = new();
+        _classMock = new();
 
         _armorMock.Setup( a => a.Armor ).Returns( 10 );
 
