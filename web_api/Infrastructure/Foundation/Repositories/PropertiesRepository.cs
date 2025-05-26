@@ -13,13 +13,15 @@ public class PropertiesRepository : IPropertiesRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddAsync( Property property )
+    public async Task<Guid> AddAsync( Property property )
     {
         await _dbContext.Properties.AddAsync( property );
         await _dbContext.SaveChangesAsync();
+
+        return property.Id;
     }
 
-    public async Task DeleteAsync( Guid id )
+    public async Task<Guid> DeleteAsync( Guid id )
     {
         Property? property = await GetByIdAsync( id );
 
@@ -30,6 +32,8 @@ public class PropertiesRepository : IPropertiesRepository
 
         _dbContext.Properties.Remove( property );
         await _dbContext.SaveChangesAsync();
+
+        return property.Id;
     }
 
     public async Task<List<Property>> GetAllAsync()
@@ -44,7 +48,7 @@ public class PropertiesRepository : IPropertiesRepository
             .FirstOrDefaultAsync( p => p.Id == id );
     }
 
-    public async Task UpdateAsync( Property property )
+    public async Task<Guid> UpdateAsync( Property property )
     {
         Property? existingProperty = await GetByIdAsync( property.Id );
 
@@ -61,6 +65,8 @@ public class PropertiesRepository : IPropertiesRepository
         existingProperty.Longitude = property.Longitude;
 
         await _dbContext.SaveChangesAsync();
+
+        return existingProperty.Id;
 
     }
 }

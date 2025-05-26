@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities;
+﻿using System.Net;
+
+namespace Domain.Entities;
 
 public class Property
 {
@@ -14,9 +16,6 @@ public class Property
 
     public IReadOnlyList<Reservation> Reservations { get; private set; } = [];
 
-    protected Property()
-    {
-    }
 
     public Property(
         string name,
@@ -26,25 +25,10 @@ public class Property
         decimal latitude,
         decimal longitude )
     {
-        if ( string.IsNullOrEmpty( name ) )
-        {
-            throw new ArgumentException( $"'{nameof( name )}' can't be null or empty", nameof( name ) );
-        }
-
-        if ( string.IsNullOrEmpty( country ) )
-        {
-            throw new ArgumentException( $"'{nameof( country )}' can't be null or empty", nameof( country ) );
-        }
-
-        if ( string.IsNullOrEmpty( city ) )
-        {
-            throw new ArgumentException( $"'{nameof( city )}' can't be null or empty", nameof( city ) );
-        }
-
-        if ( string.IsNullOrEmpty( address ) )
-        {
-            throw new ArgumentException( $"'{nameof( address )}' can't be null or empty", nameof( address ) );
-        }
+        CheckStringIfEmpty( name, nameof( name ) );
+        CheckStringIfEmpty( country, nameof( country ) );
+        CheckStringIfEmpty( city, nameof( city ) );
+        CheckStringIfEmpty( address, nameof( address ) );
 
         Id = Guid.NewGuid();
         Name = name;
@@ -55,5 +39,35 @@ public class Property
         Longitude = longitude;
     }
 
+    public Property(
+        Guid id,
+        string name,
+        string country,
+        string city,
+        string address,
+        decimal latitude,
+        decimal longitude )
+    {
+        CheckStringIfEmpty( name, nameof( name ) );
+        CheckStringIfEmpty( country, nameof( country ) );
+        CheckStringIfEmpty( city, nameof( city ) );
+        CheckStringIfEmpty( address, nameof( address ) );
 
+        Id = id;
+        Name = name;
+        Country = country;
+        City = city;
+        Address = address;
+        Latitude = latitude;
+        Longitude = longitude;
+    }
+
+    private void CheckStringIfEmpty( string value, string nameOfValue )
+    {
+        if ( string.IsNullOrEmpty( value ) )
+        {
+            throw new ArgumentException( $"'{nameOfValue}' can't be null or empty", nameOfValue );
+
+        }
+    }
 }

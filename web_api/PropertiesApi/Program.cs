@@ -1,4 +1,8 @@
+using Domain.Repositories;
+using Domain.Services;
 using Infrastructure;
+using Infrastructure.Foundation.Repositories;
+using Infrastructure.Foundation.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder( args );
@@ -15,6 +19,10 @@ builder.Services.AddDbContext<AppDbContext>(
     {
         options.UseSqlServer( configuration.GetConnectionString( "DefaultConnection" ) );
     } );
+
+builder.Services.AddScoped<IPropertyService, PropertyService>();
+builder.Services.AddScoped<IPropertiesRepository, PropertiesRepository>();
+
 
 var app = builder.Build();
 

@@ -9,10 +9,6 @@ public class AppDbContext : DbContext
     public DbSet<Property> Properties { get; set; }
     public DbSet<RoomType> RoomTypes { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
-    /*public AppDbContext()
-        : base()
-    {
-    }*/
 
     public AppDbContext( DbContextOptions<AppDbContext> options )
         : base( options )

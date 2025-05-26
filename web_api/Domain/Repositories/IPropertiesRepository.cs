@@ -6,7 +6,7 @@ public interface IPropertiesRepository
 {
     Task<List<Property>> GetAllAsync();
     Task<Property?> GetByIdAsync( Guid id );
-    Task AddAsync( Property property );
-    Task UpdateAsync( Property property );
-    Task DeleteAsync( Guid id );
+    Task<Guid> AddAsync( Property property );
+    Task<Guid> UpdateAsync( Property property );
+    Task<Guid> DeleteAsync( Guid id );
 }
