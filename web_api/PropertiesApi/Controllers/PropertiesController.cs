@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using PropertiesApi.Contracts.Property;
 
 namespace PropertiesApi.Controllers;
@@ -35,6 +36,27 @@ public class PropertiesController : ControllerBase
         return Ok( propertyResponses );
     }
 
+    [HttpGet( "{id:Guid}" )]
+    public async Task<IActionResult> GetPropertyById( [FromRoute] Guid id )
+    {
+        Property? property = await _propertiesService.GetPropertyByIdAsync( id );
+        if ( property == null )
+        {
+            return NotFound( $"Property with ID {id} not found" );
+        }
+
+        PropertyResponse propertyResponse = new(
+            property.Id,
+            property.Name,
+            property.Country,
+            property.City,
+            property.Address,
+            property.Latitude,
+            property.Longitude );
+
+        return Ok( propertyResponse );
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateProperty( [FromBody] CreatePropertyRequest propertyRequest )
     {
@@ -47,5 +69,43 @@ public class PropertiesController : ControllerBase
           propertyRequest.Longitude );
 
         return Ok( property );
+    }
+
+    [HttpPut( "{id:Guid}" )]
+    public async Task<IActionResult> UpdateProperty( [FromRoute] Guid id, [FromBody] UpdatePropertyRequest updatePropertyRequest )
+    {
+        try
+        {
+            Guid updateProperty = await _propertiesService.UpdatePropertyAsync(
+            id,
+            updatePropertyRequest.Name,
+            updatePropertyRequest.Country,
+            updatePropertyRequest.City,
+            updatePropertyRequest.Address,
+            updatePropertyRequest.Latitude,
+            updatePropertyRequest.Longitude
+            );
+
+            return Ok( updateProperty );
+        }
+        catch ( Exception ex )
+        {
+            throw new BadHttpRequestException( $"Error: {ex.Message}" );
+        }
+    }
+
+    [HttpDelete( "{id:Guid}" )]
+    public async Task<IActionResult> DeleteProperty( [FromRoute] Guid id )
+    {
+        try
+        {
+            Guid deletedProperty = await _propertiesService.DeletePropertyAsync( id );
+
+            return Ok( deletedProperty );
+        }
+        catch ( Exception ex )
+        {
+            throw new BadHttpRequestException( $"Error: {ex.Message}" );
+        }
     }
 }
