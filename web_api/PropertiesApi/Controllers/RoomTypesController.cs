@@ -1,9 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Services;
-using Infrastructure.Foundation.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using PropertiesApi.Contracts.Property;
 using PropertiesApi.Contracts.RoomType;
 
 namespace PropertiesApi.Controllers;
@@ -68,7 +65,7 @@ public class RoomTypesController : ControllerBase
     [HttpPost( "properties/{propertyId:guid}/roomtypes" )]
     public async Task<IActionResult> CreateRoomTypeByPropertyId( [FromRoute] Guid propertyId, [FromBody] CreateRoomTypeRequest roomTypeRequest )
     {
-        var roomType = await _roomTypesService.AddRoomTypeAsync(
+        Guid roomType = await _roomTypesService.AddRoomTypeAsync(
             propertyId,
             roomTypeRequest.Name,
             roomTypeRequest.DailyPrice,
@@ -87,7 +84,7 @@ public class RoomTypesController : ControllerBase
     {
         try
         {
-            var updateRoomType = await _roomTypesService.UpdateRoomTypeByIdAsync(
+            Guid updateRoomType = await _roomTypesService.UpdateRoomTypeByIdAsync(
                 id,
                 roomTypeRequest.PropertyId,
                 roomTypeRequest.Name,

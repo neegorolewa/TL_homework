@@ -61,7 +61,7 @@ public class PropertiesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProperty( [FromBody] CreatePropertyRequest propertyRequest )
     {
-        var property = await _propertiesService.AddPropertyAsync(
+        Guid property = await _propertiesService.AddPropertyAsync(
           propertyRequest.Name,
           propertyRequest.Country,
           propertyRequest.City,

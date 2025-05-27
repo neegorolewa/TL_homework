@@ -14,7 +14,7 @@ public class RoomType
     public int AvailableRooms { get; set; }
     public Property? Property { get; set; }
 
-    public IReadOnlyList<Reservation> Reservations { get; private set; } = [];
+    public List<Reservation> Reservations { get; private set; } = [];
 
     public RoomType(
         Guid propertyId,

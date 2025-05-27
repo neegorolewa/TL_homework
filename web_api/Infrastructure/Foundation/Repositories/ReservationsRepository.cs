@@ -16,6 +16,16 @@ public class ReservationsRepository : IReservationsRepository
 
     public async Task<Guid> AddAsync( Reservation reservation )
     {
+        if ( !await ExistsPropertyAsync( reservation.PropertyId ) )
+        {
+            throw new InvalidOperationException( $"Property with id '{reservation.PropertyId}' not found" );
+        }
+
+        if ( !await ExistsRoomTypeAsync( reservation.RoomTypeId ) )
+        {
+            throw new InvalidOperationException( $"RooMType with id '{reservation.RoomTypeId}' not found" );
+        }
+
         await _dbContext.Reservations.AddAsync( reservation );
         await _dbContext.SaveChangesAsync();
 

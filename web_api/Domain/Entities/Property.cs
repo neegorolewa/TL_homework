@@ -12,9 +12,9 @@ public class Property
     public decimal Latitude { get; set; }
     public decimal Longitude { get; set; }
 
-    public IReadOnlyList<RoomType> RoomTypes { get; private set; } = [];
+    public List<RoomType> RoomTypes { get; private set; } = [];
 
-    public IReadOnlyList<Reservation> Reservations { get; private set; } = [];
+    public List<Reservation> Reservations { get; private set; } = [];
 
 
     public Property(
