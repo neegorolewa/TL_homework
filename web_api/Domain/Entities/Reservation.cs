@@ -18,10 +18,6 @@ public class Reservation
     public Property? Property { get; set; }
     public RoomType? RoomType { get; set; }
 
-    protected Reservation()
-    {
-    }
-
     public Reservation(
         Guid propertyId,
         Guid roomTypeId,
@@ -45,25 +41,14 @@ public class Reservation
             throw new ArgumentNullException( "RoomTypeId can't be empty" );
         }
 
-        if ( arrivalDate >= departureDate )
+        if ( arrivalDate.ToDateTime( arrivalTime ) >= departureDate.ToDateTime( departureTime ) )
         {
-            throw new ArgumentOutOfRangeException( "Departure date must be after arrival date" );
+            throw new ArgumentOutOfRangeException( "Departure date and time must be after arrival date and time" );
         }
 
-        if ( string.IsNullOrEmpty( guestName ) )
-        {
-            throw new ArgumentException( $"'{nameof( guestName )}' can't be null or empty", nameof( guestName ) );
-        }
-
-        if ( string.IsNullOrEmpty( guestPhoneNumber ) )
-        {
-            throw new ArgumentException( $"'{nameof( guestPhoneNumber )}' can't be null or empty", nameof( guestPhoneNumber ) );
-        }
-
-        if ( string.IsNullOrEmpty( currency ) )
-        {
-            throw new ArgumentException( $"'{nameof( currency )}' can't be null or empty", nameof( currency ) );
-        }
+        CheckStringIfEmpty( guestName, nameof( guestName ) );
+        CheckStringIfEmpty( guestPhoneNumber, nameof( guestPhoneNumber ) );
+        CheckStringIfEmpty( currency, nameof( currency ) );
 
         Id = Guid.NewGuid();
         PropertyId = propertyId;
@@ -78,11 +63,12 @@ public class Reservation
         Currency = currency;
     }
 
-    /*private void CalculateTotal( decimal dailyPrice, DateOnly arrivalDate, DateOnly departureDate )
+    private void CheckStringIfEmpty( string value, string nameOfValue )
     {
-        int countNights = departureDate.DayNumber - arrivalDate.DayNumber;
-        decimal total = dailyPrice * countNights;
+        if ( string.IsNullOrEmpty( value ) )
+        {
+            throw new ArgumentException( $"'{nameOfValue}' can't be null or empty", nameOfValue );
 
-        Total = total;
-    }*/
+        }
+    }
 }
