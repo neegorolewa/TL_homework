@@ -20,8 +20,11 @@ builder.Services.AddDbContext<AppDbContext>(
         options.UseSqlServer( configuration.GetConnectionString( "DefaultConnection" ) );
     } );
 
-builder.Services.AddScoped<IPropertyService, PropertyService>();
+builder.Services.AddScoped<IPropertiesService, PropertiesService>();
+builder.Services.AddScoped<IRoomTypesService, RoomTypesService>();
+
 builder.Services.AddScoped<IPropertiesRepository, PropertiesRepository>();
+builder.Services.AddScoped<IRoomTypesRepository, RoomTypesRepository>();
 
 
 var app = builder.Build();

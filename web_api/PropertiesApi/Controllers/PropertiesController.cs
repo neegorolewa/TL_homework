@@ -10,9 +10,9 @@ namespace PropertiesApi.Controllers;
 [Route( "api/properties" )]
 public class PropertiesController : ControllerBase
 {
-    private readonly IPropertyService _propertiesService;
+    private readonly IPropertiesService _propertiesService;
 
-    public PropertiesController( IPropertyService propertyService )
+    public PropertiesController( IPropertiesService propertyService )
     {
         _propertiesService = propertyService;
     }
@@ -40,6 +40,7 @@ public class PropertiesController : ControllerBase
     public async Task<IActionResult> GetPropertyById( [FromRoute] Guid id )
     {
         Property? property = await _propertiesService.GetPropertyByIdAsync( id );
+
         if ( property == null )
         {
             return NotFound( $"Property with ID {id} not found" );

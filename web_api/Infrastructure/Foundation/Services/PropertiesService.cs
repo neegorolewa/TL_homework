@@ -4,11 +4,11 @@ using Domain.Services;
 
 namespace Infrastructure.Foundation.Services;
 
-public class PropertyService : IPropertyService
+public class PropertiesService : IPropertiesService
 {
     private readonly IPropertiesRepository _propertiesRepository;
 
-    public PropertyService( IPropertiesRepository propertiesRepository )
+    public PropertiesService( IPropertiesRepository propertiesRepository )
     {
         _propertiesRepository = propertiesRepository;
     }

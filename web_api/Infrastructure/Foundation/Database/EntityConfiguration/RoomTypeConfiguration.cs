@@ -37,6 +37,9 @@ internal class RoomTypeConfiguration : IEntityTypeConfiguration<RoomType>
             .HasMaxLength( 1000 )
             .IsRequired();
 
+        builder.Property( rt => rt.AvailableRooms )
+            .IsRequired();
+
         builder.HasMany( rt => rt.Reservations )
             .WithOne( r => r.RoomType )
             .HasForeignKey( r => r.RoomTypeId )

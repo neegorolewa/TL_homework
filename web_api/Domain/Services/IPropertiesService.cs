@@ -2,7 +2,7 @@
 
 namespace Domain.Services;
 
-public interface IPropertyService
+public interface IPropertiesService
 {
     Task<List<Property>> GetAllPropertiesAsync();
     Task<Property?> GetPropertyByIdAsync( Guid id );
