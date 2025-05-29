@@ -1,4 +1,5 @@
 ﻿using Fighters.Models.Fighters;
+using Fighters.Tests.ConsoleMethods;
 using Moq;
 
 namespace Fighters.Tests.GameManager;
@@ -21,7 +22,7 @@ public class GameManagerTests
 
         Mock<IFighter> defenderFighter = CreateFighterMock( "Defender", 10, 10, 10, 1, _randomMock.Object );
 
-        List<IFighter> fighters = new() { attackerFighter.Object, defenderFighter.Object };
+        List<IFighter> fighters = [ attackerFighter.Object, defenderFighter.Object ];
 
         //Act
         IFighter winner = Fighters.GameManager.PlayAndGetWinner( fighters );
@@ -33,7 +34,7 @@ public class GameManagerTests
     }
 
     [Fact]
-    public void PlayAndGetWinner_ThreeFightersWhenOneFighterStronger_ReturnWinnerFighterAndAnotherFightersHealthZero()
+    public void PlayAndGetWinner_ThreeFightersWhenOneFighterIsStronger_StrongerFighterWinsAndOtherAreDead()
     {
         //Arrange
         _randomMock.Setup( r => r.Next( 80, 121 ) )
@@ -48,7 +49,7 @@ public class GameManagerTests
 
         Mock<IFighter> thirdFighter = CreateFighterMock( "third", 20, 20, 20, 1, _randomMock.Object );
 
-        List<IFighter> fighters = new() { firstFighter.Object, secondFighter.Object, thirdFighter.Object };
+        List<IFighter> fighters = [ firstFighter.Object, secondFighter.Object, thirdFighter.Object ];
 
         //Act
         IFighter winner = Fighters.GameManager.PlayAndGetWinner( fighters );
@@ -65,50 +66,42 @@ public class GameManagerTests
     public void PlayAndGetWinner_TwoFighters_ReturnsRightOutMessages()
     {
         //Arrange
-        var stringWriter = new StringWriter();
+        using ConsoleFixture consoleFixture = new();
+        consoleFixture.StringWriter.GetStringBuilder().Clear();
 
-        var originalOut = Console.Out;
+        _randomMock.Setup( r => r.Next( 80, 121 ) )
+        .Returns( 100 );
 
-        try
-        {
-            Console.SetOut( stringWriter );
+        _randomMock.Setup( r => r.Next( 0, 101 ) )
+            .Returns( 50 );
 
-            _randomMock.Setup( r => r.Next( 80, 121 ) )
-                .Returns( 100 );
+        Mock<IFighter> attackerFighter = CreateFighterMock( "Attacker", 1000, 200, 100, 10, _randomMock.Object );
 
-            _randomMock.Setup( r => r.Next( 0, 101 ) )
-                .Returns( 50 );
+        Mock<IFighter> defenderFighter = CreateFighterMock( "Defender", 10, 10, 0, 1, _randomMock.Object );
 
-            Mock<IFighter> attackerFighter = CreateFighterMock( "Attacker", 1000, 200, 100, 10, _randomMock.Object );
+        List<IFighter> fighters = [ attackerFighter.Object, defenderFighter.Object ];
 
-            Mock<IFighter> defenderFighter = CreateFighterMock( "Defender", 10, 10, 0, 1, _randomMock.Object );
+        //Act
+        IFighter winner = Fighters.GameManager.PlayAndGetWinner( fighters );
 
-            List<IFighter> fighters = new() { attackerFighter.Object, defenderFighter.Object };
+        //Assert
+        string output = consoleFixture.StringWriter.ToString();
 
-            //Act
-            IFighter winner = Fighters.GameManager.PlayAndGetWinner( fighters );
+        Assert.Contains( "Раунд 0", output );
+        Assert.Contains( "Осталось бойцов: 2", output );
+        Assert.Contains(
+            $"""
+            Бой {attackerFighter.Object.Name} vs {defenderFighter.Object.Name}
+            Боец {defenderFighter.Object.Name} получает 200 урона.
+            Уровень здоровья: {defenderFighter.Object.CurrentHealth}, Уровень брони: {defenderFighter.Object.CurrentArmor}
+            Боец {defenderFighter.Object.Name} убит!
+            """, output );
 
-            //Assert
-            string output = stringWriter.ToString();
-            Assert.Contains( "Раунд 0", output );
-            Assert.Contains( "Осталось бойцов: 2", output );
-            Assert.Contains( $"Бой {attackerFighter.Object.Name} vs {defenderFighter.Object.Name}", output );
-            Assert.Contains(
-                $"""
-                Боец {defenderFighter.Object.Name} получает 200 урона.
-                Уровень здоровья: {defenderFighter.Object.CurrentHealth}, Уровень брони: {defenderFighter.Object.CurrentArmor}
-                """, output );
-            Assert.Contains( $"Боец {defenderFighter.Object.Name} убит!", output );
-        }
-        finally
-        {
-            Console.SetOut( originalOut );
-        }
     }
 
     private Mock<IFighter> CreateFighterMock( string name, int health, int damage, int armor, int initiative, Random random )
     {
-        var fighterMock = new Mock<IFighter>();
+        Mock<IFighter> fighterMock = new();
 
         int currentHealth = health;
         int currentArmor = armor;
