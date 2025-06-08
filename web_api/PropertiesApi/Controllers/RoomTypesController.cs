@@ -18,65 +18,66 @@ public class RoomTypesController : ControllerBase
     [HttpGet( "properties/{propertyId:guid}/roomtypes" )]
     public async Task<IActionResult> GetAllRoomTypesByPropertyId( [FromRoute] Guid propertyId )
     {
-        List<RoomType> roomTypes = await _roomTypesService.GetAllRoomTypesByPropertyIdAsync( propertyId );
+        try
+        {
+            List<RoomType> roomTypes = await _roomTypesService.GetAllRoomTypesByPropertyIdAsync( propertyId );
 
-        List<RoomTypeResponse> roomTypesResponse = roomTypes
-            .Select( rt => new RoomTypeResponse(
-                rt.Id,
-                rt.PropertyId,
-                rt.Name,
-                rt.DailyPrice,
-                rt.Currency,
-                rt.MinPersonCount,
-                rt.MaxPersonCount,
-                rt.Services,
-                rt.Amenities,
-                rt.AvailableRooms ) )
-            .ToList();
+            List<RoomTypeResponse> roomTypesResponse = roomTypes
+                .Select( rt => RoomTypeResponse.FromEntity( rt ) )
+                .ToList();
 
-        return Ok( roomTypesResponse );
+            return Ok( roomTypesResponse );
+        }
+        catch ( Exception ex )
+        {
+            return BadRequest( $"Error: {ex.Message}" );
+        }
     }
 
     [HttpGet( "roomtypes/{id:guid}" )]
     public async Task<IActionResult> GetRoomTypeById( [FromRoute] Guid id )
     {
-        RoomType? roomType = await _roomTypesService.GetRoomTypeByIdAsync( id );
-
-        if ( roomType == null )
+        try
         {
-            return NotFound( $"RoomType with ID '{id}' not found" );
+            RoomType? roomType = await _roomTypesService.GetRoomTypeByIdAsync( id );
+
+            if ( roomType == null )
+            {
+                return NotFound( $"RoomType with ID '{id}' not found" );
+            }
+
+            RoomTypeResponse roomTypeResponse = RoomTypeResponse.FromEntity( roomType );
+
+            return Ok( roomTypeResponse );
         }
-
-        RoomTypeResponse roomTypeResponse = new(
-            roomType.Id,
-            roomType.PropertyId,
-            roomType.Name,
-            roomType.DailyPrice,
-            roomType.Currency,
-            roomType.MinPersonCount,
-            roomType.MaxPersonCount,
-            roomType.Services,
-            roomType.Amenities,
-            roomType.AvailableRooms );
-
-        return Ok( roomTypeResponse );
+        catch ( Exception ex )
+        {
+            return BadRequest( $"Error: {ex.Message}" );
+        }
     }
 
     [HttpPost( "properties/{propertyId:guid}/roomtypes" )]
     public async Task<IActionResult> CreateRoomTypeByPropertyId( [FromRoute] Guid propertyId, [FromBody] CreateRoomTypeRequest roomTypeRequest )
     {
-        Guid roomType = await _roomTypesService.AddRoomTypeAsync(
-            propertyId,
-            roomTypeRequest.Name,
-            roomTypeRequest.DailyPrice,
-            roomTypeRequest.Currency,
-            roomTypeRequest.MinPersonCount,
-            roomTypeRequest.MaxPersonCount,
-            roomTypeRequest.Services,
-            roomTypeRequest.Amenities,
-            roomTypeRequest.AvailableRooms );
+        try
+        {
+            Guid roomType = await _roomTypesService.AddRoomTypeAsync(
+                propertyId,
+                roomTypeRequest.Name,
+                roomTypeRequest.DailyPrice,
+                roomTypeRequest.Currency,
+                roomTypeRequest.MinPersonCount,
+                roomTypeRequest.MaxPersonCount,
+                roomTypeRequest.Services,
+                roomTypeRequest.Amenities,
+                roomTypeRequest.AvailableRooms );
 
-        return Ok( roomType );
+            return Ok( roomType );
+        }
+        catch ( Exception ex )
+        {
+            return BadRequest( $"Error: {ex.Message}" );
+        }
     }
 
     [HttpPut( "roomtypes/{id:guid}" )]
@@ -100,7 +101,7 @@ public class RoomTypesController : ControllerBase
         }
         catch ( Exception ex )
         {
-            throw new InvalidOperationException( $"Error: {ex.Message}" );
+            return BadRequest( $"Error: {ex.Message}" );
         }
     }
 
@@ -115,7 +116,7 @@ public class RoomTypesController : ControllerBase
         }
         catch ( Exception ex )
         {
-            throw new BadHttpRequestException( $"Error: {ex.Message}" );
+            return BadRequest( $"Error: {ex.Message}" );
         }
     }
 }

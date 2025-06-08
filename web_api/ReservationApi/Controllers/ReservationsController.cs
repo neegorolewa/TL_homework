@@ -1,8 +1,6 @@
-﻿using Azure.Core;
-using Domain.Contracts;
+﻿using Domain.Contracts;
 using Domain.Entities;
 using Domain.Services;
-using Infrastructure.Foundation.Services;
 using Microsoft.AspNetCore.Mvc;
 using ReservationApi.Contracts;
 
@@ -26,13 +24,20 @@ public class ReservationsController : ControllerBase
         [FromQuery] int? guestsNumber,
         [FromQuery] string? city )
     {
-        List<PropertyWithRoomTypeDto> reservations = await _reservationsService.GetSearchOptions(
+        try
+        {
+            List<PropertyWithRoomTypeDto> reservations = await _reservationsService.GetSearchOptions(
             arrivalDate,
             departureTime,
             guestsNumber,
             city );
 
-        return Ok( reservations );
+            return Ok( reservations );
+        }
+        catch ( Exception ex )
+        {
+            return BadRequest( $"Eror: {ex.Message}" );
+        }
     }
 
     [HttpGet( "reservations/" )]
@@ -55,52 +60,37 @@ public class ReservationsController : ControllerBase
             guestPhoneNumber );
 
             List<ReservationResponse> reservationsResponse = reservations
-                .Select( r => new ReservationResponse(
-                    r.Id,
-                    r.PropertyId,
-                    r.RoomTypeId,
-                    r.ArrivalDate,
-                    r.DepartureDate,
-                    r.ArrivalTime,
-                    r.DepartureTime,
-                    r.GuestName,
-                    r.GuestPhoneNumber,
-                    r.Total,
-                    r.Currency ) )
+                .Select( r => ReservationResponse.FromEntity( r ) )
                 .ToList();
 
             return Ok( reservationsResponse );
         }
         catch ( Exception ex )
         {
-            throw new BadHttpRequestException( $"Error: {ex.Message}" );
+            return BadRequest( $"Error: {ex.Message}" );
         }
     }
 
     [HttpGet( "reservations/{id:guid}" )]
     public async Task<IActionResult> GetReservationById( [FromRoute] Guid id )
     {
-        Reservation? reservation = await _reservationsService.GetReservationByIdAsync( id );
-
-        if ( reservation == null )
+        try
         {
-            return NotFound( $"Reservation with id '{id}' not found" );
+            Reservation? reservation = await _reservationsService.GetReservationByIdAsync( id );
+
+            if ( reservation == null )
+            {
+                return NotFound( $"Reservation with id '{id}' not found" );
+            }
+
+            ReservationResponse reservationResponse = ReservationResponse.FromEntity( reservation );
+
+            return Ok( reservationResponse );
         }
-
-        ReservationResponse reservationResponse = new(
-            reservation.Id,
-            reservation.PropertyId,
-            reservation.RoomTypeId,
-            reservation.ArrivalDate,
-            reservation.DepartureDate,
-            reservation.ArrivalTime,
-            reservation.DepartureTime,
-            reservation.GuestName,
-            reservation.GuestPhoneNumber,
-            reservation.Total,
-            reservation.Currency );
-
-        return Ok( reservationResponse );
+        catch ( Exception ex )
+        {
+            return BadRequest( $"Eror: {ex.Message}" );
+        }
     }
 
     [HttpPost( "reservations" )]
@@ -123,7 +113,7 @@ public class ReservationsController : ControllerBase
         }
         catch ( Exception ex )
         {
-            throw new BadHttpRequestException( $"Error: {ex.Message}" );
+            return BadRequest( $"Error: {ex.Message}" );
         }
     }
 
@@ -138,7 +128,7 @@ public class ReservationsController : ControllerBase
         }
         catch ( Exception ex )
         {
-            throw new BadHttpRequestException( $"Error: {ex.Message}" );
+            return BadRequest( $"Error: {ex.Message}" );
         }
     }
 }

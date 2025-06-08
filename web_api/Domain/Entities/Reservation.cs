@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using Domain.Helpers;
 
 namespace Domain.Entities;
 
@@ -31,24 +31,14 @@ public class Reservation
         string currency
         )
     {
-        if ( propertyId == Guid.Empty )
-        {
-            throw new ArgumentNullException( "PropertyId can't be empty" );
-        }
+        Guard.AgainstEmptyGuid( propertyId, nameof( propertyId ) );
+        Guard.AgainstEmptyGuid( roomTypeId, nameof( roomTypeId ) );
 
-        if ( roomTypeId == Guid.Empty )
-        {
-            throw new ArgumentNullException( "RoomTypeId can't be empty" );
-        }
+        Guard.AgainstInvalidDateRange( arrivalDate, departureDate, arrivalTime, departureTime );
 
-        if ( arrivalDate.ToDateTime( arrivalTime ) >= departureDate.ToDateTime( departureTime ) )
-        {
-            throw new ArgumentOutOfRangeException( "Departure date and time must be after arrival date and time" );
-        }
-
-        CheckStringIfEmpty( guestName, nameof( guestName ) );
-        CheckStringIfEmpty( guestPhoneNumber, nameof( guestPhoneNumber ) );
-        CheckStringIfEmpty( currency, nameof( currency ) );
+        Guard.AgainstNullOrEmpty( guestName, nameof( guestName ) );
+        Guard.AgainstNullOrEmpty( guestPhoneNumber, nameof( guestPhoneNumber ) );
+        Guard.AgainstNullOrEmpty( currency, nameof( currency ) );
 
         Id = Guid.NewGuid();
         PropertyId = propertyId;
@@ -61,14 +51,5 @@ public class Reservation
         GuestPhoneNumber = guestPhoneNumber;
         Total = total;
         Currency = currency;
-    }
-
-    private void CheckStringIfEmpty( string value, string nameOfValue )
-    {
-        if ( string.IsNullOrEmpty( value ) )
-        {
-            throw new ArgumentException( $"'{nameOfValue}' can't be null or empty", nameOfValue );
-
-        }
     }
 }

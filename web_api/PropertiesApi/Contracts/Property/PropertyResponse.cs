@@ -28,5 +28,15 @@ public class PropertyResponse
         Longitude = longitude;
     }
 
-
+    public static PropertyResponse FromEntity( Domain.Entities.Property property )
+    {
+        return new PropertyResponse(
+            property.Id,
+            property.Name,
+            property.Country,
+            property.City,
+            property.Address,
+            property.Latitude,
+            property.Longitude );
+    }
 }

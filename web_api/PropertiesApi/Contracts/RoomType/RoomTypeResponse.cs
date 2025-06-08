@@ -36,4 +36,19 @@ public class RoomTypeResponse
         Amenities = amenities;
         AvailableRooms = availableRooms;
     }
+
+    public static RoomTypeResponse FromEntity( Domain.Entities.RoomType roomType )
+    {
+        return new RoomTypeResponse(
+            roomType.Id,
+            roomType.PropertyId,
+            roomType.Name,
+            roomType.DailyPrice,
+            roomType.Currency,
+            roomType.MinPersonCount,
+            roomType.MaxPersonCount,
+            roomType.Services,
+            roomType.Amenities,
+            roomType.AvailableRooms );
+    }
 }

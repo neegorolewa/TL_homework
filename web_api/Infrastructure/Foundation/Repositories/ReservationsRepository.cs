@@ -59,53 +59,46 @@ public class ReservationsRepository : IReservationsRepository
 
     public async Task<List<Reservation>> GetAllAsync( Guid? propertyId, Guid? roomTypeId, DateOnly? arrivalDate, DateOnly? departureDate, string? guestName, string? guestPhoneNumber )
     {
-        List<Reservation> reservations = await _dbContext.Reservations
-            .AsNoTracking()
-            .ToListAsync();
+        IQueryable<Reservation> reservations = _dbContext.Reservations
+            .AsNoTracking();
 
         if ( propertyId.HasValue )
         {
             reservations = reservations
-                .Where( r => r.PropertyId == propertyId )
-                .ToList();
+                .Where( r => r.PropertyId == propertyId );
         }
 
         if ( roomTypeId.HasValue )
         {
             reservations = reservations
-                .Where( r => r.RoomTypeId == roomTypeId )
-                .ToList();
+                .Where( r => r.RoomTypeId == roomTypeId );
         }
 
         if ( arrivalDate.HasValue )
         {
             reservations = reservations
-                .Where( r => r.ArrivalDate == arrivalDate )
-                .ToList();
+                .Where( r => r.ArrivalDate == arrivalDate );
         }
 
         if ( departureDate.HasValue )
         {
             reservations = reservations
-                .Where( r => r.DepartureDate == departureDate )
-                .ToList();
+                .Where( r => r.DepartureDate == departureDate );
         }
 
         if ( !string.IsNullOrEmpty( guestName ) )
         {
             reservations = reservations
-                .Where( r => r.GuestName == guestName )
-                .ToList();
+                .Where( r => r.GuestName == guestName );
         }
 
         if ( !string.IsNullOrEmpty( guestPhoneNumber ) )
         {
             reservations = reservations
-                .Where( r => r.GuestPhoneNumber == guestPhoneNumber )
-                .ToList();
+                .Where( r => r.GuestPhoneNumber == guestPhoneNumber );
         }
 
-        return reservations;
+        return await reservations.ToListAsync();
     }
 
     public async Task<Reservation?> GetByIdAsync( Guid id )
@@ -148,33 +141,15 @@ public class ReservationsRepository : IReservationsRepository
         List<PropertyWithRoomTypeDto> filteredProperties = await query
          .Select( p => new PropertyWithRoomTypeDto
          {
-             Property = new PropertyDto(
-                 p.Id,
-                 p.Name,
-                 p.Country,
-                 p.City,
-                 p.Address,
-                 p.Latitude,
-                 p.Longitude ),
+             Property = PropertyDto.FromEntity( p ),
              RoomTypes = p.RoomTypes
                  .Where( rt =>
-                     ( !guestsNumber.HasValue || rt.MaxPersonCount >= guestsNumber ) &&
-
-                     rt.AvailableRooms > 0 &&
+                     ( !guestsNumber.HasValue || rt.MaxPersonCount >= guestsNumber ) && rt.AvailableRooms > 0 &&
                      !rt.Reservations.Any( r =>
                          r.DepartureDate > arrivalDate &&
                          r.ArrivalDate < departureDate )
                  )
-                 .Select( rt => new RoomTypeDto(
-                     rt.Id,
-                     rt.Name,
-                     rt.DailyPrice,
-                     rt.Currency,
-                     rt.MinPersonCount,
-                     rt.MaxPersonCount,
-                     rt.Services,
-                     rt.Amenities,
-                     rt.AvailableRooms ) )
+                 .Select( rt => RoomTypeDto.FromEntity( rt ) )
                  .ToList()
          } )
          .ToListAsync();

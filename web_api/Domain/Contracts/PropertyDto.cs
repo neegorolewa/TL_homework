@@ -1,4 +1,6 @@
-﻿namespace Domain.Contracts;
+﻿using Domain.Entities;
+
+namespace Domain.Contracts;
 
 public class PropertyDto
 {
@@ -26,6 +28,18 @@ public class PropertyDto
         Address = address;
         Latitude = latitude;
         Longitude = longitude;
+    }
+
+    public static PropertyDto FromEntity( Property property )
+    {
+        return new PropertyDto(
+            property.Id,
+            property.Name,
+            property.Country,
+            property.City,
+            property.Address,
+            property.Latitude,
+            property.Longitude );
     }
 
 }

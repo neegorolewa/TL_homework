@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Helpers;
+
+namespace Domain.Entities;
 
 public class RoomType
 {
@@ -27,31 +29,16 @@ public class RoomType
         string amenities,
         int availableRooms )
     {
-        if ( propertyId == Guid.Empty )
-        {
-            throw new ArgumentException( $"'{nameof( propertyId )} can't be empty'", nameof( propertyId ) );
-        }
+        Guard.AgainstEmptyGuid( propertyId, nameof( propertyId ) );
 
-        CheckStringIfEmpty( name, nameof( name ) );
-        CheckStringIfEmpty( currency, nameof( currency ) );
-        CheckStringIfEmpty( services, nameof( services ) );
-        CheckStringIfEmpty( amenities, nameof( amenities ) );
+        Guard.AgainstNullOrEmpty( name, nameof( name ) );
+        Guard.AgainstNullOrEmpty( currency, nameof( currency ) );
+        Guard.AgainstNullOrEmpty( services, nameof( services ) );
+        Guard.AgainstNullOrEmpty( amenities, nameof( amenities ) );
 
-
-        if ( dailyPrice <= 0 )
-        {
-            throw new ArgumentOutOfRangeException( $"'{nameof( DailyPrice )} must be grater than 0'" );
-        }
-
-        if ( minPersonCount <= 0 || maxPersonCount <= 0 || maxPersonCount < minPersonCount )
-        {
-            throw new ArgumentOutOfRangeException( "Invalid person count range." );
-        }
-
-        if ( availableRooms < 1 )
-        {
-            throw new ArgumentOutOfRangeException( $"{nameof( availableRooms )} must be grater than 1" );
-        }
+        Guard.AgainstInvalidDailyPrice( dailyPrice, nameof( dailyPrice ) );
+        Guard.AgainstInvalidPersonCount( minPersonCount, maxPersonCount );
+        Guard.AgainstInvalidAvailableRooms( availableRooms, nameof( availableRooms ) );
 
         Id = Guid.NewGuid();
         PropertyId = propertyId;
@@ -77,36 +64,17 @@ public class RoomType
         string amenities,
         int availableRooms )
     {
-        if ( id == Guid.Empty )
-        {
-            throw new ArgumentException( $"'{nameof( id )} can't be empty'", nameof( id ) );
-        }
+        Guard.AgainstEmptyGuid( id, nameof( id ) );
+        Guard.AgainstEmptyGuid( propertyId, nameof( propertyId ) );
 
-        if ( propertyId == Guid.Empty )
-        {
-            throw new ArgumentException( $"'{nameof( propertyId )} can't be empty'", nameof( propertyId ) );
-        }
+        Guard.AgainstNullOrEmpty( name, nameof( name ) );
+        Guard.AgainstNullOrEmpty( currency, nameof( currency ) );
+        Guard.AgainstNullOrEmpty( services, nameof( services ) );
+        Guard.AgainstNullOrEmpty( amenities, nameof( amenities ) );
 
-        CheckStringIfEmpty( name, nameof( name ) );
-        CheckStringIfEmpty( currency, nameof( currency ) );
-        CheckStringIfEmpty( services, nameof( services ) );
-        CheckStringIfEmpty( amenities, nameof( amenities ) );
-
-
-        if ( dailyPrice <= 0 )
-        {
-            throw new ArgumentOutOfRangeException( $"'{nameof( DailyPrice )} must be grater than 0'" );
-        }
-
-        if ( minPersonCount <= 0 || maxPersonCount <= 0 || maxPersonCount < minPersonCount )
-        {
-            throw new ArgumentOutOfRangeException( "Invalid person count range." );
-        }
-
-        if ( availableRooms < 1 )
-        {
-            throw new ArgumentOutOfRangeException( $"{nameof( availableRooms )} must be grater than 1" );
-        }
+        Guard.AgainstInvalidDailyPrice( dailyPrice, nameof( dailyPrice ) );
+        Guard.AgainstInvalidPersonCount( minPersonCount, maxPersonCount );
+        Guard.AgainstInvalidAvailableRooms( availableRooms, nameof( availableRooms ) );
 
         Id = id;
         PropertyId = propertyId;
@@ -118,14 +86,5 @@ public class RoomType
         Services = services;
         Amenities = amenities;
         AvailableRooms = availableRooms;
-    }
-
-    private void CheckStringIfEmpty( string value, string nameOfValue )
-    {
-        if ( string.IsNullOrEmpty( value ) )
-        {
-            throw new ArgumentException( $"'{nameOfValue}' can't be null or empty", nameOfValue );
-
-        }
     }
 }

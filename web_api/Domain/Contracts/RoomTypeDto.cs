@@ -1,4 +1,6 @@
-﻿namespace Domain.Contracts;
+﻿using Domain.Entities;
+
+namespace Domain.Contracts;
 
 public class RoomTypeDto
 {
@@ -32,5 +34,20 @@ public class RoomTypeDto
         Services = services;
         Amenities = amenities;
         AvailableRooms = availableRooms;
+    }
+
+    public static RoomTypeDto FromEntity( RoomType roomType )
+    {
+        return new RoomTypeDto(
+            roomType.Id,
+            roomType.Name,
+            roomType.DailyPrice,
+            roomType.Currency,
+            roomType.MinPersonCount,
+            roomType.MaxPersonCount,
+            roomType.Services,
+            roomType.Amenities,
+            roomType.AvailableRooms );
+
     }
 }

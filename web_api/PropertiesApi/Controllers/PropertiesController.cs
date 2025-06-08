@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using PropertiesApi.Contracts.Property;
 
 namespace PropertiesApi.Controllers;
@@ -20,56 +20,63 @@ public class PropertiesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllProperties()
     {
-        List<Property> properties = await _propertiesService.GetAllPropertiesAsync();
+        try
+        {
+            List<Property> properties = await _propertiesService.GetAllPropertiesAsync();
 
-        List<PropertyResponse> propertyResponses = properties
-            .Select( p => new PropertyResponse(
-                p.Id,
-                p.Name,
-                p.Country,
-                p.City,
-                p.Address,
-                p.Latitude,
-                p.Longitude ) )
-            .ToList();
+            List<PropertyResponse> propertyResponses = properties
+                .Select( p => PropertyResponse.FromEntity( p ) )
+                .ToList();
 
-        return Ok( propertyResponses );
+            return Ok( propertyResponses );
+        }
+        catch ( Exception ex )
+        {
+            return BadRequest( $"Error: {ex.Message}" );
+        }
     }
 
     [HttpGet( "{id:Guid}" )]
     public async Task<IActionResult> GetPropertyById( [FromRoute] Guid id )
     {
-        Property? property = await _propertiesService.GetPropertyByIdAsync( id );
-
-        if ( property == null )
+        try
         {
-            return NotFound( $"Property with ID {id} not found" );
+            Property? property = await _propertiesService.GetPropertyByIdAsync( id );
+
+            if ( property == null )
+            {
+                return NotFound( $"Property with ID {id} not found" );
+            }
+
+            PropertyResponse propertyResponse = PropertyResponse.FromEntity( property );
+
+            return Ok( propertyResponse );
         }
-
-        PropertyResponse propertyResponse = new(
-            property.Id,
-            property.Name,
-            property.Country,
-            property.City,
-            property.Address,
-            property.Latitude,
-            property.Longitude );
-
-        return Ok( propertyResponse );
+        catch ( Exception ex )
+        {
+            return BadRequest( $"Error: {ex.Message}" );
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateProperty( [FromBody] CreatePropertyRequest propertyRequest )
     {
-        Guid property = await _propertiesService.AddPropertyAsync(
-          propertyRequest.Name,
-          propertyRequest.Country,
-          propertyRequest.City,
-          propertyRequest.Address,
-          propertyRequest.Latitude,
-          propertyRequest.Longitude );
+        try
+        {
+            Guid property = await _propertiesService.AddPropertyAsync(
+              propertyRequest.Name,
+              propertyRequest.Country,
+              propertyRequest.City,
+              propertyRequest.Address,
+              propertyRequest.Latitude,
+              propertyRequest.Longitude );
 
-        return Ok( property );
+            return Ok( property );
+        }
+        catch ( Exception ex )
+        {
+            return BadRequest( $"Error: {ex.Message}" );
+        }
     }
 
     [HttpPut( "{id:Guid}" )]
@@ -91,7 +98,7 @@ public class PropertiesController : ControllerBase
         }
         catch ( Exception ex )
         {
-            throw new BadHttpRequestException( $"Error: {ex.Message}" );
+            return BadRequest( $"Error: {ex.Message}" );
         }
     }
 
@@ -106,7 +113,7 @@ public class PropertiesController : ControllerBase
         }
         catch ( Exception ex )
         {
-            throw new BadHttpRequestException( $"Error: {ex.Message}" );
+            return BadRequest( $"Error: {ex.Message}" );
         }
     }
 }

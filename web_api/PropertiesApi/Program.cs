@@ -5,8 +5,8 @@ using Infrastructure.Foundation.Repositories;
 using Infrastructure.Foundation.Services;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder( args );
-var configuration = builder.Configuration;
+WebApplicationBuilder builder = WebApplication.CreateBuilder( args );
+ConfigurationManager configuration = builder.Configuration;
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -27,7 +27,7 @@ builder.Services.AddScoped<IPropertiesRepository, PropertiesRepository>();
 builder.Services.AddScoped<IRoomTypesRepository, RoomTypesRepository>();
 
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if ( app.Environment.IsDevelopment() )

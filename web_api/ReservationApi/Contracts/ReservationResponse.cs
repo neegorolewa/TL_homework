@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-
-namespace ReservationApi.Contracts;
+﻿namespace ReservationApi.Contracts;
 
 public class ReservationResponse
 {
@@ -40,5 +38,21 @@ public class ReservationResponse
         GuestPhoneNumber = guestPhoneNumber;
         Total = total;
         Currency = currency;
+    }
+
+    public static ReservationResponse FromEntity( Domain.Entities.Reservation reservation )
+    {
+        return new ReservationResponse(
+            reservation.Id,
+            reservation.PropertyId,
+            reservation.RoomTypeId,
+            reservation.ArrivalDate,
+            reservation.DepartureDate,
+            reservation.ArrivalTime,
+            reservation.DepartureTime,
+            reservation.GuestName,
+            reservation.GuestPhoneNumber,
+            reservation.Total,
+            reservation.Currency );
     }
 }

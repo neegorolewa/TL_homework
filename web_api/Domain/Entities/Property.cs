@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.ComponentModel.DataAnnotations;
+using Domain.Helpers;
 
 namespace Domain.Entities;
 
@@ -25,10 +26,10 @@ public class Property
         decimal latitude,
         decimal longitude )
     {
-        CheckStringIfEmpty( name, nameof( name ) );
-        CheckStringIfEmpty( country, nameof( country ) );
-        CheckStringIfEmpty( city, nameof( city ) );
-        CheckStringIfEmpty( address, nameof( address ) );
+        Guard.AgainstNullOrEmpty( name, nameof( name ) );
+        Guard.AgainstNullOrEmpty( country, nameof( country ) );
+        Guard.AgainstNullOrEmpty( city, nameof( city ) );
+        Guard.AgainstNullOrEmpty( address, nameof( address ) );
 
         Id = Guid.NewGuid();
         Name = name;
@@ -48,10 +49,10 @@ public class Property
         decimal latitude,
         decimal longitude )
     {
-        CheckStringIfEmpty( name, nameof( name ) );
-        CheckStringIfEmpty( country, nameof( country ) );
-        CheckStringIfEmpty( city, nameof( city ) );
-        CheckStringIfEmpty( address, nameof( address ) );
+        Guard.AgainstNullOrEmpty( name, nameof( name ) );
+        Guard.AgainstNullOrEmpty( country, nameof( country ) );
+        Guard.AgainstNullOrEmpty( city, nameof( city ) );
+        Guard.AgainstNullOrEmpty( address, nameof( address ) );
 
         Id = id;
         Name = name;
@@ -60,14 +61,5 @@ public class Property
         Address = address;
         Latitude = latitude;
         Longitude = longitude;
-    }
-
-    private void CheckStringIfEmpty( string value, string nameOfValue )
-    {
-        if ( string.IsNullOrEmpty( value ) )
-        {
-            throw new ArgumentException( $"'{nameOfValue}' can't be null or empty", nameOfValue );
-
-        }
     }
 }
