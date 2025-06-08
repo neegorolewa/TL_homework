@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Fighters.Tests.ConsoleMethods;
+﻿namespace Fighters.Tests.ConsoleMethods;
 
 public class ConsoleFixture : IDisposable
 {
@@ -8,6 +6,7 @@ public class ConsoleFixture : IDisposable
     public StringWriter StringWriter { get; }
     private readonly TextReader _originalIn;
     private readonly TextWriter _originalOut;
+    private bool _disposed = false;
 
     public ConsoleFixture()
     {
@@ -17,22 +16,35 @@ public class ConsoleFixture : IDisposable
         Console.SetOut( StringWriter );
     }
 
+    ~ConsoleFixture()
+    {
+        Dispose( false );
+    }
+
     public void SetInput( string input )
     {
         StringReader = new StringReader( input );
         Console.SetIn( StringReader );
     }
 
-    public void SetOut()
-    {
-        Console.SetOut( StringWriter );
-    }
-
     public void Dispose()
     {
-        Console.SetIn( _originalIn );
-        Console.SetOut( _originalOut );
-        StringReader?.Dispose();
-        StringWriter?.Dispose();
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    public virtual void Dispose( bool disposing )
+    {
+        if ( _disposed ) return;
+
+        if ( disposing )
+        {
+            Console.SetIn( _originalIn );
+            Console.SetOut( _originalOut );
+            StringReader?.Dispose();
+            StringWriter.Dispose();
+        }
+
+        _disposed = true;
     }
 }

@@ -61,9 +61,9 @@ public class FighterTests
     public void CalculateDamage_NormalConditions_ReturnsDamageInRange()
     {
         //Arrange
-
         const int minExpectedDamage = ( int )( 0.8 * 35 );
         const int maxExpectedDamage = ( int )( 1.2 * 35 * 2 );
+
         //Act
         int damage = _fighter.CalculateDamage();
 
@@ -78,10 +78,6 @@ public class FighterTests
     [InlineData( 0, 30, 150 )]
     public void TakeDamage_VariosDamageValues_ClaculateCorrectReaminigHealthAndArmors( int damage, int remainingArmor, int remainigHealth )
     {
-        //Arrange
-        int currentHealth = _fighter.CurrentHealth;
-        int currentArmor = _fighter.CurrentArmor;
-
         //Act
         _fighter.TakeDamage( damage );
 

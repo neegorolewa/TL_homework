@@ -54,21 +54,23 @@ public class FightersFactoryTests : IClassFixture<ConsoleFixture>
         _consoleFixture = consoleFixture;
     }
 
+    private void PrepareTest( int inputIndex )
+    {
+        _consoleFixture.SetInput( _testsInput[ inputIndex ] );
+        _consoleFixture.StringWriter.GetStringBuilder().Clear();
+    }
+
     [Fact]
     public void CreateFighter_CreateCorrectsFighter()
     {
         //Arrange
-        string input = _testsInput[ 0 ];
-
-        _consoleFixture.SetInput( input );
-        _consoleFixture.StringWriter.GetStringBuilder().Clear();
+        PrepareTest( 0 );
 
         //Act
         IFighter fighter = Fighters.FightersFactory.CreateFighter();
 
         //Assert
         string output = _consoleFixture.StringWriter.ToString();
-
         Assert.Contains( "Введите имя бойца: ", output );
         Assert.Contains( "Выберите расу из списка ниже:", output );
         Assert.Contains( "Выберите класс бойца из списка ниже:", output );
@@ -93,13 +95,10 @@ public class FightersFactoryTests : IClassFixture<ConsoleFixture>
     public void CreateFighter_EmptyStringBeforeValidInput_ReturnsMessageFromMethodGetStringValue()
     {
         // Arrange
-        string input = _testsInput[ 1 ];
-
-        _consoleFixture.SetInput( input );
-        _consoleFixture.StringWriter.GetStringBuilder().Clear();
+        PrepareTest( 1 );
 
         // Act
-        IFighter fihgter = Fighters.FightersFactory.CreateFighter();
+        Fighters.FightersFactory.CreateFighter();
 
         // Assert
         string output = _consoleFixture.StringWriter.ToString();
@@ -111,17 +110,13 @@ public class FightersFactoryTests : IClassFixture<ConsoleFixture>
     public void CreateFighter_StringValueWhenShouldBeIntValueThenValidParameters_ReturnsMessageFromMethodGetIntValue()
     {
         // Arrange
-        string input = _testsInput[ 2 ];
-
-        _consoleFixture.SetInput( input );
-        _consoleFixture.StringWriter.GetStringBuilder().Clear();
+        PrepareTest( 2 );
 
         // Act
-        IFighter fihgter = Fighters.FightersFactory.CreateFighter();
+        Fighters.FightersFactory.CreateFighter();
 
         // Assert
         string output = _consoleFixture.StringWriter.ToString();
-
         Assert.Contains( "Введите числовое значение", output );
 
     }
@@ -130,18 +125,13 @@ public class FightersFactoryTests : IClassFixture<ConsoleFixture>
     public void CreateFighter_ValueNotInRangeThenValidParameters_ReturnsMessageFromMethodIsInRange()
     {
         // Arrange
-        string input = _testsInput[ 3 ];
-
-        _consoleFixture.SetInput( input );
-        _consoleFixture.StringWriter.GetStringBuilder().Clear();
-
+        PrepareTest( 3 );
 
         // Act
-        IFighter fihgter = Fighters.FightersFactory.CreateFighter();
+        Fighters.FightersFactory.CreateFighter();
 
         // Assert
         string output = _consoleFixture.StringWriter.ToString();
-
         Assert.Contains( "Введите значени от 0 до 3", output );
 
     }

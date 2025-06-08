@@ -1,6 +1,7 @@
 ﻿using Fighters.Models.Fighters;
 using Fighters.Tests.ConsoleMethods;
 using Moq;
+using Moq.Language;
 
 namespace Fighters.Tests.GameManager;
 
@@ -12,16 +13,9 @@ public class GameManagerTests
     public void PlayAndGetWinner_TwoFightersWhenOneFighterStronger_ReturnsLoserWithZeroHealthAndFirstAttackedAttacker()
     {
         //Arrange
-        _randomMock.Setup( r => r.Next( 80, 121 ) )
-            .Returns( 100 );
-
-        _randomMock.Setup( r => r.Next( 0, 101 ) )
-            .Returns( 50 );
-
+        SetupNextRandomValues( [ 100, 50 ] );
         Mock<IFighter> attackerFighter = CreateFighterMock( "Attacker", 1000, 200, 100, 10, _randomMock.Object );
-
         Mock<IFighter> defenderFighter = CreateFighterMock( "Defender", 10, 10, 10, 1, _randomMock.Object );
-
         List<IFighter> fighters = [ attackerFighter.Object, defenderFighter.Object ];
 
         //Act
@@ -37,18 +31,10 @@ public class GameManagerTests
     public void PlayAndGetWinner_ThreeFightersWhenOneFighterIsStronger_StrongerFighterWinsAndOtherAreDead()
     {
         //Arrange
-        _randomMock.Setup( r => r.Next( 80, 121 ) )
-            .Returns( 100 );
-
-        _randomMock.Setup( r => r.Next( 0, 101 ) )
-            .Returns( 50 );
-
+        SetupNextRandomValues( [ 100, 50 ] );
         Mock<IFighter> firstFighter = CreateFighterMock( "first", 1000, 200, 100, 10, _randomMock.Object );
-
         Mock<IFighter> secondFighter = CreateFighterMock( "second", 10, 10, 10, 5, _randomMock.Object );
-
         Mock<IFighter> thirdFighter = CreateFighterMock( "third", 20, 20, 20, 1, _randomMock.Object );
-
         List<IFighter> fighters = [ firstFighter.Object, secondFighter.Object, thirdFighter.Object ];
 
         //Act
@@ -59,7 +45,6 @@ public class GameManagerTests
         Assert.Equal( firstFighter.Object.Name, winner.Name );
         Assert.True( secondFighter.Object.CurrentHealth == 0 );
         Assert.True( thirdFighter.Object.CurrentHealth == 0 );
-
     }
 
     [Fact]
@@ -68,17 +53,9 @@ public class GameManagerTests
         //Arrange
         using ConsoleFixture consoleFixture = new();
         consoleFixture.StringWriter.GetStringBuilder().Clear();
-
-        _randomMock.Setup( r => r.Next( 80, 121 ) )
-        .Returns( 100 );
-
-        _randomMock.Setup( r => r.Next( 0, 101 ) )
-            .Returns( 50 );
-
+        SetupNextRandomValues( [ 100, 50 ] );
         Mock<IFighter> attackerFighter = CreateFighterMock( "Attacker", 1000, 200, 100, 10, _randomMock.Object );
-
         Mock<IFighter> defenderFighter = CreateFighterMock( "Defender", 10, 10, 0, 1, _randomMock.Object );
-
         List<IFighter> fighters = [ attackerFighter.Object, defenderFighter.Object ];
 
         //Act
@@ -86,7 +63,6 @@ public class GameManagerTests
 
         //Assert
         string output = consoleFixture.StringWriter.ToString();
-
         Assert.Contains( "Раунд 0", output );
         Assert.Contains( "Осталось бойцов: 2", output );
         Assert.Contains(
@@ -99,7 +75,7 @@ public class GameManagerTests
 
     }
 
-    private Mock<IFighter> CreateFighterMock( string name, int health, int damage, int armor, int initiative, Random random )
+    private static Mock<IFighter> CreateFighterMock( string name, int health, int damage, int armor, int initiative, Random random )
     {
         Mock<IFighter> fighterMock = new();
 
@@ -133,5 +109,16 @@ public class GameManagerTests
                 } );
 
         return fighterMock;
+    }
+
+    private void SetupNextRandomValues( int[] values )
+    {
+        ISetupSequentialResult<int> sequence = _randomMock.SetupSequence( r => r.Next( It.IsAny<int>(), It.IsAny<int>() ) );
+        foreach ( var value in values )
+        {
+            sequence.Returns( value );
+        }
+
+        sequence.Returns( values.Last() );
     }
 }
