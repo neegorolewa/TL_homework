@@ -29,16 +29,16 @@ public class RoomType
         string amenities,
         int availableRooms )
     {
-        Guard.AgainstEmptyGuid( propertyId, nameof( propertyId ) );
+        DomainValidator.EmptyGuid( propertyId, nameof( propertyId ) );
 
-        Guard.AgainstNullOrEmpty( name, nameof( name ) );
-        Guard.AgainstNullOrEmpty( currency, nameof( currency ) );
-        Guard.AgainstNullOrEmpty( services, nameof( services ) );
-        Guard.AgainstNullOrEmpty( amenities, nameof( amenities ) );
+        DomainValidator.NullOrEmpty( name, nameof( name ) );
+        DomainValidator.NullOrEmpty( currency, nameof( currency ) );
+        DomainValidator.NullOrEmpty( services, nameof( services ) );
+        DomainValidator.NullOrEmpty( amenities, nameof( amenities ) );
 
-        Guard.AgainstInvalidDailyPrice( dailyPrice, nameof( dailyPrice ) );
-        Guard.AgainstInvalidPersonCount( minPersonCount, maxPersonCount );
-        Guard.AgainstInvalidAvailableRooms( availableRooms, nameof( availableRooms ) );
+        DomainValidator.InvalidDailyPrice( dailyPrice, nameof( dailyPrice ) );
+        DomainValidator.InvalidPersonCount( minPersonCount, maxPersonCount );
+        DomainValidator.InvalidAvailableRooms( availableRooms, nameof( availableRooms ) );
 
         Id = Guid.NewGuid();
         PropertyId = propertyId;
@@ -64,17 +64,17 @@ public class RoomType
         string amenities,
         int availableRooms )
     {
-        Guard.AgainstEmptyGuid( id, nameof( id ) );
-        Guard.AgainstEmptyGuid( propertyId, nameof( propertyId ) );
+        DomainValidator.EmptyGuid( id, nameof( id ) );
+        DomainValidator.EmptyGuid( propertyId, nameof( propertyId ) );
 
-        Guard.AgainstNullOrEmpty( name, nameof( name ) );
-        Guard.AgainstNullOrEmpty( currency, nameof( currency ) );
-        Guard.AgainstNullOrEmpty( services, nameof( services ) );
-        Guard.AgainstNullOrEmpty( amenities, nameof( amenities ) );
+        DomainValidator.NullOrEmpty( name, nameof( name ) );
+        DomainValidator.NullOrEmpty( currency, nameof( currency ) );
+        DomainValidator.NullOrEmpty( services, nameof( services ) );
+        DomainValidator.NullOrEmpty( amenities, nameof( amenities ) );
 
-        Guard.AgainstInvalidDailyPrice( dailyPrice, nameof( dailyPrice ) );
-        Guard.AgainstInvalidPersonCount( minPersonCount, maxPersonCount );
-        Guard.AgainstInvalidAvailableRooms( availableRooms, nameof( availableRooms ) );
+        DomainValidator.InvalidDailyPrice( dailyPrice, nameof( dailyPrice ) );
+        DomainValidator.InvalidPersonCount( minPersonCount, maxPersonCount );
+        DomainValidator.InvalidAvailableRooms( availableRooms, nameof( availableRooms ) );
 
         Id = id;
         PropertyId = propertyId;

@@ -31,14 +31,14 @@ public class Reservation
         string currency
         )
     {
-        Guard.AgainstEmptyGuid( propertyId, nameof( propertyId ) );
-        Guard.AgainstEmptyGuid( roomTypeId, nameof( roomTypeId ) );
+        DomainValidator.EmptyGuid( propertyId, nameof( propertyId ) );
+        DomainValidator.EmptyGuid( roomTypeId, nameof( roomTypeId ) );
 
-        Guard.AgainstInvalidDateRange( arrivalDate, departureDate, arrivalTime, departureTime );
+        DomainValidator.InvalidDateRange( arrivalDate, departureDate, arrivalTime, departureTime );
 
-        Guard.AgainstNullOrEmpty( guestName, nameof( guestName ) );
-        Guard.AgainstNullOrEmpty( guestPhoneNumber, nameof( guestPhoneNumber ) );
-        Guard.AgainstNullOrEmpty( currency, nameof( currency ) );
+        DomainValidator.NullOrEmpty( guestName, nameof( guestName ) );
+        DomainValidator.NullOrEmpty( guestPhoneNumber, nameof( guestPhoneNumber ) );
+        DomainValidator.NullOrEmpty( currency, nameof( currency ) );
 
         Id = Guid.NewGuid();
         PropertyId = propertyId;

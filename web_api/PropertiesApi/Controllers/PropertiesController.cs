@@ -25,8 +25,7 @@ public class PropertiesController : ControllerBase
             List<Property> properties = await _propertiesService.GetAllPropertiesAsync();
 
             List<PropertyResponse> propertyResponses = properties
-                .Select( p => PropertyResponse.FromEntity( p ) )
-                .ToList();
+                .ConvertAll( p => PropertyResponse.FromEntity( p ) );
 
             return Ok( propertyResponses );
         }

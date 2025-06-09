@@ -26,10 +26,10 @@ public class Property
         decimal latitude,
         decimal longitude )
     {
-        Guard.AgainstNullOrEmpty( name, nameof( name ) );
-        Guard.AgainstNullOrEmpty( country, nameof( country ) );
-        Guard.AgainstNullOrEmpty( city, nameof( city ) );
-        Guard.AgainstNullOrEmpty( address, nameof( address ) );
+        DomainValidator.NullOrEmpty( name, nameof( name ) );
+        DomainValidator.NullOrEmpty( country, nameof( country ) );
+        DomainValidator.NullOrEmpty( city, nameof( city ) );
+        DomainValidator.NullOrEmpty( address, nameof( address ) );
 
         Id = Guid.NewGuid();
         Name = name;
@@ -49,10 +49,10 @@ public class Property
         decimal latitude,
         decimal longitude )
     {
-        Guard.AgainstNullOrEmpty( name, nameof( name ) );
-        Guard.AgainstNullOrEmpty( country, nameof( country ) );
-        Guard.AgainstNullOrEmpty( city, nameof( city ) );
-        Guard.AgainstNullOrEmpty( address, nameof( address ) );
+        DomainValidator.NullOrEmpty( name, nameof( name ) );
+        DomainValidator.NullOrEmpty( country, nameof( country ) );
+        DomainValidator.NullOrEmpty( city, nameof( city ) );
+        DomainValidator.NullOrEmpty( address, nameof( address ) );
 
         Id = id;
         Name = name;

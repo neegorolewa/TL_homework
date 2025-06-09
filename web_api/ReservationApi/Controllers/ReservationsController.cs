@@ -60,8 +60,7 @@ public class ReservationsController : ControllerBase
             guestPhoneNumber );
 
             List<ReservationResponse> reservationsResponse = reservations
-                .Select( r => ReservationResponse.FromEntity( r ) )
-                .ToList();
+                .ConvertAll( r => ReservationResponse.FromEntity( r ) );
 
             return Ok( reservationsResponse );
         }

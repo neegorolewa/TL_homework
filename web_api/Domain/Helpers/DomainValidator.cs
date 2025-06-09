@@ -1,8 +1,8 @@
 ﻿namespace Domain.Helpers;
 
-public class Guard
+public class DomainValidator
 {
-    public static void AgainstNullOrEmpty( string value, string nameOfValue )
+    public static void NullOrEmpty( string value, string nameOfValue )
     {
         if ( string.IsNullOrEmpty( value ) )
         {
@@ -10,7 +10,7 @@ public class Guard
         }
     }
 
-    public static void AgainstEmptyGuid( Guid guid, string nameOfValue )
+    public static void EmptyGuid( Guid guid, string nameOfValue )
     {
         if ( guid == Guid.Empty )
         {
@@ -18,7 +18,7 @@ public class Guard
         }
     }
 
-    public static void AgainstInvalidDateRange( DateOnly arrivalDate, DateOnly departureDate, TimeOnly arrivalTime, TimeOnly departureTime )
+    public static void InvalidDateRange( DateOnly arrivalDate, DateOnly departureDate, TimeOnly arrivalTime, TimeOnly departureTime )
     {
         if ( arrivalDate.ToDateTime( arrivalTime ) >= departureDate.ToDateTime( departureTime ) )
         {
@@ -26,15 +26,15 @@ public class Guard
         }
     }
 
-    public static void AgainstInvalidDailyPrice( decimal dailyPrice, string nameOfValue )
+    public static void InvalidDailyPrice( decimal dailyPrice, string nameOfValue )
     {
         if ( dailyPrice <= 0 )
         {
-            throw new ArgumentOutOfRangeException( $"'{nameOfValue} must be grater than 0'" );
+            throw new ArgumentOutOfRangeException( $"'{nameOfValue} must be greater than 0'" );
         }
     }
 
-    public static void AgainstInvalidPersonCount( int minPersonCount, int maxPersonCount )
+    public static void InvalidPersonCount( int minPersonCount, int maxPersonCount )
     {
         if ( minPersonCount <= 0 || maxPersonCount <= 0 || maxPersonCount < minPersonCount )
         {
@@ -42,7 +42,7 @@ public class Guard
         }
     }
 
-    public static void AgainstInvalidAvailableRooms( int availableRooms, string nameOfValue )
+    public static void InvalidAvailableRooms( int availableRooms, string nameOfValue )
     {
         if ( availableRooms < 1 )
         {
