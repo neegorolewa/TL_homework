@@ -52,12 +52,12 @@ public class FightersFactoryTests : IClassFixture<ConsoleFixture>
     public FightersFactoryTests( ConsoleFixture consoleFixture )
     {
         _consoleFixture = consoleFixture;
+        _consoleFixture.StringWriter.GetStringBuilder().Clear();
     }
 
     private void PrepareTest( int inputIndex )
     {
         _consoleFixture.SetInput( _testsInput[ inputIndex ] );
-        _consoleFixture.StringWriter.GetStringBuilder().Clear();
     }
 
     [Fact]

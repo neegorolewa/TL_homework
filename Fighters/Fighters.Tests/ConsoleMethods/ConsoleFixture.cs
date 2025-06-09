@@ -16,11 +16,6 @@ public class ConsoleFixture : IDisposable
         Console.SetOut( StringWriter );
     }
 
-    ~ConsoleFixture()
-    {
-        Dispose( false );
-    }
-
     public void SetInput( string input )
     {
         StringReader = new StringReader( input );
@@ -29,22 +24,14 @@ public class ConsoleFixture : IDisposable
 
     public void Dispose()
     {
-        Dispose( true );
-        GC.SuppressFinalize( this );
-    }
-
-    public virtual void Dispose( bool disposing )
-    {
         if ( _disposed ) return;
 
-        if ( disposing )
-        {
-            Console.SetIn( _originalIn );
-            Console.SetOut( _originalOut );
-            StringReader?.Dispose();
-            StringWriter.Dispose();
-        }
+        Console.SetIn( _originalIn );
+        Console.SetOut( _originalOut );
+        StringReader?.Dispose();
+        StringWriter.Dispose();
 
         _disposed = true;
+        GC.SuppressFinalize( this );
     }
 }
