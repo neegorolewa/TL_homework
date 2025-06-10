@@ -2,7 +2,7 @@
 
 public class ConsoleFixture : IDisposable
 {
-    public StringReader StringReader { get; private set; }
+    public StringReader? StringReader { get; private set; }
     public StringWriter StringWriter { get; }
     private readonly TextReader _originalIn;
     private readonly TextWriter _originalOut;

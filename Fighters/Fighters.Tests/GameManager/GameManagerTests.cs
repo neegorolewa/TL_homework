@@ -13,7 +13,7 @@ public class GameManagerTests
     public void PlayAndGetWinner_TwoFightersWhenOneFighterStronger_ReturnsLoserWithZeroHealthAndFirstAttackedAttacker()
     {
         //Arrange
-        SetupNextRandomValues( [ 100, 50, 0 ] );
+        SetupNextRandomValues( [ 100, 50 ] );
         Mock<IFighter> attackerFighter = CreateFighterMock( "Attacker", 1000, 200, 100, 10, _randomMock.Object );
         Mock<IFighter> defenderFighter = CreateFighterMock( "Defender", 10, 10, 10, 1, _randomMock.Object );
         List<IFighter> fighters = [ attackerFighter.Object, defenderFighter.Object ];
@@ -53,7 +53,7 @@ public class GameManagerTests
         //Arrange
         using ConsoleFixture consoleFixture = new();
         consoleFixture.StringWriter.GetStringBuilder().Clear();
-        SetupNextRandomValues( [ 100, 50, 0 ] );
+        SetupNextRandomValues( [ 100, 50 ] );
         Mock<IFighter> attackerFighter = CreateFighterMock( "Attacker", 1000, 200, 100, 10, _randomMock.Object );
         Mock<IFighter> defenderFighter = CreateFighterMock( "Defender", 10, 10, 0, 1, _randomMock.Object );
         List<IFighter> fighters = [ attackerFighter.Object, defenderFighter.Object ];
@@ -113,9 +113,12 @@ public class GameManagerTests
 
     private void SetupNextRandomValues( int[] values )
     {
-        ISetupSequentialResult<int> sequence = _randomMock.SetupSequence( r => r.Next( It.IsAny<int>(), It.IsAny<int>() ) )
-            .Returns( values[ 0 ] )
-            .Returns( values[ 1 ] )
-            .Returns( values[ 2 ] );
+        ISetupSequentialResult<int> sequence = _randomMock.SetupSequence( r => r.Next( It.IsAny<int>(), It.IsAny<int>() ) );
+        foreach ( var value in values )
+        {
+            sequence.Returns( value );
+        }
+
+        sequence.Returns( values.Last() );
     }
 }
