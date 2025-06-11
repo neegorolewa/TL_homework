@@ -114,7 +114,7 @@ public class GameManagerTests
     private void SetupNextRandomValues( int[] values )
     {
         ISetupSequentialResult<int> sequence = _randomMock.SetupSequence( r => r.Next( It.IsAny<int>(), It.IsAny<int>() ) );
-        foreach ( var value in values )
+        foreach ( int value in values )
         {
             sequence.Returns( value );
         }
