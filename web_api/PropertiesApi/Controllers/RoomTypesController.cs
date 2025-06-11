@@ -23,7 +23,7 @@ public class RoomTypesController : ControllerBase
             List<RoomType> roomTypes = await _roomTypesService.GetAllRoomTypesByPropertyIdAsync( propertyId );
 
             List<RoomTypeResponse> roomTypesResponse = roomTypes
-                .ConvertAll( rt => RoomTypeResponse.FromEntity( rt ) );
+                .ConvertAll( RoomTypeResponse.FromEntity );
 
             return Ok( roomTypesResponse );
         }

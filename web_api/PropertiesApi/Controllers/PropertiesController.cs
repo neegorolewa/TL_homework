@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 using Domain.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PropertiesApi.Contracts.Property;
 
@@ -25,7 +24,7 @@ public class PropertiesController : ControllerBase
             List<Property> properties = await _propertiesService.GetAllPropertiesAsync();
 
             List<PropertyResponse> propertyResponses = properties
-                .ConvertAll( p => PropertyResponse.FromEntity( p ) );
+                .ConvertAll( PropertyResponse.FromEntity );
 
             return Ok( propertyResponses );
         }
