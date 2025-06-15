@@ -1,0 +1,67 @@
+.form {
+    display: flex;
+    max-width: 550px;
+    width: 100%;
+    border: 1px solid #dcdcdc;
+    border-radius: 20px;
+    margin: 50px;
+    letter-spacing: 0.015rem;
+    flex-direction: column;
+    padding-top: 25px;
+    padding-left: 70px;
+    padding-right: 86px;
+    padding-bottom: 69px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+}
+
+.usernameContainer {
+    position: relative;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.usernameContainer label {
+    position: absolute;
+    top: -7px;
+    left: 7px;
+    background: #ffffff;
+    font-size: 10px;
+    color: #dcdcdc;
+}
+
+.usernameContainer input {
+    color: #404040;
+    padding-left: 15px;
+    padding-top: 6px;
+    padding-bottom: 7px;
+    border-radius: 5px;
+    border: 1px solid #dcdcdc
+}
+
+.descriptionContainer {
+    position: relative;
+    margin-top: 27px;
+    display: flex;
+    flex-direction: column;
+}
+
+.descriptionContainer textarea {
+    resize: none;
+    min-height: 113px;
+    font-family: 'Inter', sans-serif;
+    color: #000000;
+    padding-left: 15px;
+    padding-top: 10px;
+    padding-bottom: 85px;
+    border-radius: 5px;
+    border: 1px solid #dcdcdc;
+    white-space: pre-wrap;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+}
