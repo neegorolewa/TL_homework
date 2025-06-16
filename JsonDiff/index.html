@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./src/styles/style.css">
+    <title>JSON diff</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">JSON-DIFF</a>
+            <div class="auth-section">
+                <span id="user-greeting" class="hidden">Hello, <span id="username"></span>!</span>
+                <a href="#" id="auth-link">Log in</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="promo-page" class="promo-page">
+            <p class="text">
+                Compare <span class="text1">two JSON objects</span> and see the <span class="text2">difference</span>
+            </p>
+            <a href="#" id="start-link" class="hidden">Start</a>
+        </section>
+
+        <section id="form-page" class="form-page hidden">
+            <div class="wrapper">
+                <div class="content">
+                    <form class="main-form">
+                        <label for="oldJson">Old JSON</label>
+                        <textarea id="oldJson" rows="10" cols="50">
+{
+    "timeout": 20,
+    "verbose": true,
+    "host": "google.com"
+}
+                        </textarea>
+                        <span id="error-jsonOld" class="error-json hidden">Некорректный JSON</span>
+                        <label for="newJson">New JSON</label>
+                        <textarea id="newJson" rows="10" cols="50">
+{
+    "timeout": 50,
+    "proxy": 888888,
+    "host": "google.com"
+}
+                        </textarea>
+                        <span id="error-jsonNew" class="error-json hidden">Обязательное поле</span>
+                        <button>Show difference</button>
+                    </form>
+                    <div class="result"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="login-page" class="login-page hidden">
+            <div class="login-wrapper">
+                <div class="login-content">
+                    <h2>Login Form</h2>
+                    <form id="login-form" class="login-form">
+                        <label for="login-input">LOGIN</label>
+                        <input type="text" id="login-input">
+                        <span id="login-error" class="error-message hidden">Обязательное поле</span>
+                        <button type="submit">SIGN IN</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">&copy; Copyright 2025</p>
+    </footer>
+
+    <script type="module" src="./src/index.js"></script>
+</body>
+
+</html>
